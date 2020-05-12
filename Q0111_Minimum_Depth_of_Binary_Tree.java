@@ -9,25 +9,22 @@ import java.util.Queue;
  * Created by csy99 on 4/4/20.
  */
 public class Q111_Minimum_Depth_of_Binary_Tree {
-  // recursion
-  int depth = Integer.MAX_VALUE;
-  public int minDepth(TreeNode root) {
-    if (root == null) return 0;
-    helper(root, 0);
-    return depth;
-  }
-  
-  private void helper(TreeNode root, int d) {
-    if (root == null) {
-      return;
-    } 
-    if (root.left == null && root.right == null) {
-      depth = Math.min(depth, d + 1);
-      return;
-    } 
-    helper(root.left, d + 1);
-    helper(root.right, d + 1);
-  }
+    // recusion
+    public int minDepth(TreeNode root) {
+        return depth(root, 0);
+    }
+    
+    private int depth(TreeNode root, int d) {
+        if (root == null)
+            return d;
+        if (root.left == null && root.right == null)
+            return 1 + d;
+        if (root.right == null)
+            return 1 + depth(root.left, d);
+        else if (root.left == null)
+            return 1 + depth(root.right, d);
+        return 1 + Math.min(depth(root.left, d), depth(root.right, d));
+    }
 
     public int minDepthIterative(TreeNode root) {
         if (root == null)
