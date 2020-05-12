@@ -26,27 +26,28 @@ import java.util.List;
  * Explanation: All root-to-leaf paths are: 1->2->5, 1->3
  */
 public class Q257_Binary_Tree_Paths {
-  public List<String> binaryTreePaths(TreeNode root) {
-    List<String> path = new ArrayList();
-    if (root == null) return path;
-    dfs(path, root, new StringBuilder());
-    return path;
-  }
-  
-  private void dfs(List<String> path, TreeNode root, StringBuilder cur) {
-    cur.append(root.val);
-    int len = cur.length();
-    if (root.left == null && root.right == null) {  // check if it is a leaf
-      path.add(cur.toString());
-      return;
+    List<String> res = new ArrayList();
+    public List<String> binaryTreePaths(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        dfs(root, sb);
+        return res;
     }
-    if (root.left != null) {
-      dfs(path, root.left, cur.append("->"));
-      cur.setLength(len);
+    
+    private void dfs(TreeNode root, StringBuilder sb) {
+        if (root == null)
+            return;
+        int len = sb.length();
+        sb.append("->").append(root.val);
+        if (root.left == null && root.right == null) {
+            String path = new String(sb).substring(2);
+            res.add(path);
+            sb.setLength(len);
+            return;
+        }
+        if (root.left != null)
+            dfs(root.left, sb);
+        if (root.right != null)
+            dfs(root.right, sb);
+        sb.setLength(len);
     }
-    if (root.right != null) {
-      dfs(path, root.right, cur.append("->"));
-      cur.setLength(len);
-    }
-  }
 }
