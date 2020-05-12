@@ -11,25 +11,28 @@ import java.util.Stack;
  * Created by csy99 on 4/5/20.
  */
 public class Q107_Binary_Tree_Level_Order_Traversal_II {
-  public List<List<Integer>> levelOrderBottom(TreeNode root) {
-    if (root == null)
-      return new ArrayList<>();
-    List<List<Integer>> res = new ArrayList();
-    Queue<TreeNode> q = new LinkedList();
-    q.offer(root);
-    while (!q.isEmpty()) {
-      int size = q.size();
-      List<Integer> level = new ArrayList();
-      for (int i = 0; i < size; i++) {
-        TreeNode cur = q.poll();
-        level.add(cur.val);
-        if (cur.left != null) 
-          q.offer(cur.left);
-        if (cur.right != null) 
-          q.offer(cur.right);
-      }
-      res.add(0, level);
+    // reverse the result of Q102 is trivial
+    int deepest = 0;
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        List<List<Integer>> res = new ArrayList();
+        deepest = maxDepth(root);
+        for (int i = 0; i < deepest; i++)
+            res.add(new ArrayList<Integer>());
+        dfs(res, root, 1);
+        return res;
     }
-    return res;
-  }
+    
+    private void dfs(List<List<Integer>> res, TreeNode root, int level) {
+        if (root == null)
+            return;
+        res.get(deepest - level).add(root.val);
+        dfs(res, root.left, level+1);
+        dfs(res, root.right, level+1);
+    }
+    
+    private int maxDepth(TreeNode root) {
+        if (root == null)
+            return 0;
+        return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+    }
 }
