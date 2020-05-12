@@ -9,7 +9,7 @@ import java.util.Queue;
  * Created by csy99 on 4/7/20.
  */
 public class Q297_Serialize_and_Deserialize_Binary_Tree {
-    // Encodes a tree to a single string.
+    // level order
     public String serialize(TreeNode root) {
         if (root == null) return null;
         StringBuilder sb = new StringBuilder();
@@ -32,7 +32,6 @@ public class Q297_Serialize_and_Deserialize_Binary_Tree {
         return sb.toString();
     }
 
-    // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
         if (data == null) return null;
         String[] tree = data.split(",");
@@ -57,5 +56,42 @@ public class Q297_Serialize_and_Deserialize_Binary_Tree {
         }
         return root;
     }
-}
+    
+    // preorder
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        write(root, sb);
+        return sb.deleteCharAt(sb.length()-1).toString();
+    }
+    
+    private void write(TreeNode root, StringBuilder sb) {
+        if (root == null) {
+            sb.append("#,");
+            return;
+        }
+        sb.append(root.val).append(",");
+        write(root.left, sb);
+        write(root.right, sb);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if (data == null || data.isEmpty())
+            return null;
+        String[] arr = data.split(",");
+        LinkedList<String> nodes = new LinkedList();
+        for (int i = 0; i < arr.length; i++)
+            nodes.add(arr[i]);
+        return build(nodes);
+    }
+    
+    private TreeNode build(LinkedList<String> nodes) {
+        String val = nodes.remove();
+        if (val.equals("#")) 
+            return null;
+        TreeNode root = new TreeNode(Integer.parseInt(val));
+        root.left = build(nodes);
+        root.right = build(nodes);
+        return root;
+    }
 }
