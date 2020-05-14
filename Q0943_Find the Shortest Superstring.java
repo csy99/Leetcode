@@ -2,6 +2,54 @@
  * Created by csy99 on 5/9/20. 
  */
 class Solution {
+    // DFS 
+    int n;
+    String superStr = null;
+    String[] arr;
+    int[][] match;
+    public String shortestSuperstring(String[] A) {
+        n = A.length;
+        if (n == 0) return "";
+        arr = A;
+        match = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int k = 0;
+                for (k = 0; k < arr[i].length(); k++) {
+                    if (arr[j].indexOf(arr[i].substring(k)) == 0) 
+                        break;
+                }
+                match[i][j] = arr[i].length() - k;
+            }
+        }
+        dfs(new StringBuilder(), new HashSet<String>(), -1);
+        return superStr;
+    }
+    
+    private void dfs(StringBuilder sb, HashSet<String> used, int prev) {
+        if (used.size() == n) {
+            if (superStr == null || sb.length() < superStr.length())
+                superStr = sb.toString();
+            return;
+        }
+        int len = sb.length();
+        for (int i = 0; i < n; i++) {
+            if (used.contains(arr[i]))
+                continue;
+            int matchLen = prev == -1 ? 0 : match[prev][i];
+            if (superStr != null && 
+                sb.length() + arr[i].length() - matchLen > superStr.length())
+                continue;
+            used.add(arr[i]);
+            sb.append(arr[i].substring(matchLen));
+            dfs(sb, used, i);
+            used.remove(arr[i]);
+            sb.setLength(len);
+        }
+    }
+    
+    
+    // DP
     public String shortestSuperstring(String[] A) {
         int N = A.length;
 
