@@ -10,20 +10,30 @@ import java.util.List;
  * write a function to generate all combinations of well-formed parentheses.
  */
 public class Q022_Generate_Parentheses {
-  public List<String> generateParenthesis(int n) {
-    List<String> res = new ArrayList<>();
-    helper("", res, n, 0, 0);
-    return res;
-  }
-  
-  private void helper(String s, List<String> res, int n, int left, int right) {
-    if (right == n) {
-      res.add(s);
-      return;
+    List<String> res = new ArrayList();
+    int n;
+    public List<String> generateParenthesis(int n) {
+        this.n = n;
+        if (n == 0) return res;
+        dfs(n, n, new StringBuilder());
+        return res;
     }
-    if (left < n) 
-      helper(s+"(", res, n, left+1, right);
-    if (right < left) 
-      helper(s+")", res, n, left, right+1);      
-  }
+    
+    private void dfs(int pos, int neg, StringBuilder sb) {
+        if (sb.length() == 2*n) {
+            res.add(sb.toString());
+            return;
+        }
+        int len = sb.length();
+        if (pos > 0) {
+            sb.append("(");
+            dfs(pos-1, neg, sb);
+            sb.setLength(len);
+        }
+        if (neg > 0 && neg > pos) {  // more left parathesis should appear first
+            sb.append(")");
+            dfs(pos, neg-1, sb);
+            sb.setLength(len);
+        }
+    }
 }
