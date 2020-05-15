@@ -49,37 +49,26 @@ public class Q131_Palindrome_Partitioning {
         return true;
     }
   
-  
-  public List<List<String>> partition(String s) {
-    List<List<String>> res = new ArrayList<>();
-    boolean[][] pali = new boolean[s.length()][s.length()];
-    for (int i = 0; i < s.length(); i++) 
-      pali[i][i] = true;
-    for (int i = 0; i < s.length() - 1; i++)
-      pali[i][i+1] = s.charAt(i) == s.charAt(i+1);
-    for (int l = 3; l < s.length() + 1; l++) {
-      for (int i = 0; i < s.length()-l+1; i++) {
-        if (s.charAt(i) == s.charAt(i+l-1) && pali[i+1][i+l-2])
-          pali[i][i+l-1] = true;
-      }
-    }
-    backTrack(s, res, new LinkedList(), pali, 0);
-    return res;
-  }
-  
-  private void backTrack(String s, List<List<String>> res, LinkedList<String> part, 
-                        boolean[][] pali, int start) {
-    if (s.length() == start) { // traverse through all chars in string s
-      res.add(new LinkedList<String> (part));
-      return;
+    // backtracking
+    List<List<String>> res = new ArrayList();
+    String str;
+    public List<List<String>> partition(String s) {
+        str = s;
+        dfs(new ArrayList(), 0);
+        return res;
     }
     
-    for (int end = 0; end < s.length(); end++) {
-      if (pali[start][end]) {
-        part.add(s.substring(start, end+1));
-        backTrack(s, res, part, pali, end+1);
-        part.removeLast();
-      }
+    private void dfs(List<String> path, int start) {
+        if (start == str.length()) {
+            res.add(new ArrayList(path));
+            return;
+        }
+        for (int i = 1; i+start <= str.length(); i++) {
+            String sub = str.substring(start, start+i);
+            if (!isPa(sub)) continue;
+            path.add(sub);
+            dfs(path, start+i);
+            path.remove(path.size()-1);
+        }
     }
-  }
 }
