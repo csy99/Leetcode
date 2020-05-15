@@ -12,75 +12,76 @@ import java.util.Set;
  * Created by csy99 on 3/30/20.
  */
 public class Q126_Word_Ladder_II {
-  String beginWord;
-  List<List<String>> res = new ArrayList();
-  public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
-    this.beginWord = beginWord;
-    HashSet<String> dict = new HashSet(wordList);
-    if (!dict.contains(endWord)) return res;
-    dict.remove(beginWord);
-    dict.remove(endWord);
-    
-    Queue<String> q = new LinkedList();
-    q.offer(beginWord);
-    HashMap<String, List<String>> parents = new HashMap();
-    HashMap<String, Integer> steps = new HashMap();
-    steps.put(beginWord, 1);
-    final int len = beginWord.length();
-    int step = 0;
-    boolean found = false;
-    
-    while (!q.isEmpty() && !found) {
-      step++;
-      for (int size = q.size(); size > 0; size--) {
-        String word = q.poll();
-        StringBuilder sb = new StringBuilder(word);
-        for (int i = 0; i < len; i++) {
-          char c = word.charAt(i);
-          String modified = null;
-          for (int j = 'a'; j < 'z'; j++) {
-            if (j == c) continue;
-            sb.setCharAt(i, (char)j);
-            modified = sb.toString();
-            if (modified.equals(endWord)) {
-              List<String> parent = parents.get(modified);
-              if (parent == null)
-                parent = new ArrayList();
-              parent.add(word);
-              parents.put(modified, parent);
-              found = true;
-            } else {
-              // not a new word, but another transform with same path length
-              if (steps.containsKey(modified) && step < steps.get(modified)) {
-                List<String> parent = parents.get(modified);
-                if (parent == null)
-                  parent = new ArrayList();
-                parent.add(word);
-                parents.put(modified, parent);
-              }
+    List<List<String>> res = new ArrayList();
+    HashMap<String, Integer> level;
+    HashMap<String, List<String>> parents;
+    String bw;
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        bw = beginWord;
+        HashSet<String> dict = new HashSet(wordList);
+        if (!dict.contains(endWord)) return res;
+        dict.remove(endWord);
+        dict.remove(beginWord);
+        level = new HashMap();
+        parents = new HashMap();
+        Queue<String> q = new LinkedList();
+        q.add(beginWord);
+        int len = beginWord.length();
+        int step = 0;
+        boolean found = false;
+        while (!q.isEmpty() && !found) {
+            int size = q.size();
+            step++;
+            for (int s = 0; s < size; s++) {
+                String parent = q.poll();
+                char[] arr = parent.toCharArray();
+                for (int i = 0; i < len; i++) {
+                    char copy = arr[i];
+                    for (int c = 'a'; c <= 'z'; c++) {
+                        if (c == copy) continue;
+                        arr[i] = (char)c;
+                        String trans = new String(arr);
+                        if (endWord.equals(trans)) {
+                            List<String> pList = parents.getOrDefault(endWord, new ArrayList());
+                            pList.add(parent);
+                            parents.put(endWord, pList);
+                            found = true;
+                        } else if (level.containsKey(trans) && step < level.get(trans)) {  // same depth
+                            List<String> pList = parents.getOrDefault(trans, new ArrayList());
+                            pList.add(parent);
+                            parents.put(trans, pList);
+                        }
+                        if (!dict.contains(trans)) continue;
+                        dict.remove(trans);
+                        q.add(trans);    
+                        level.put(trans, step+1);
+                        List<String> pList = parents.getOrDefault(trans, new ArrayList());
+                        pList.add(parent);
+                        parents.put(trans, pList);
+                    }
+                    arr[i] = copy;
+                }
             }
-            if (!dict.contains(modified)) continue;
-            dict.remove(modified);
-            q.offer(modified);
-            steps.put(modified, steps.get(word)+1);
-            List<String> parent = parents.get(modified);
-            if (parent == null)
-              parent = new ArrayList();
-            parent.add(word);
-            parents.put(modified, parent);
-          }
-          sb.setCharAt(i, c);
         }
-        
-      }
+        if (!found) return res;
+        List<String> path = new ArrayList();
+        path.add(endWord);
+        getPath(path, endWord);
+        return res;
     }
-    if (found) {
-      List<String> path = new ArrayList();
-      path.add(endWord);
-      getPath(endWord, parents, path);
+    
+    private void getPath(List<String> path, String word) {
+        if (word.equals(bw)) {
+            res.add(new ArrayList(path));
+            return;
+        }
+        List<String> pList = parents.get(path.get(0));
+        for (String p: pList) {
+            path.add(0, p);
+            getPath(path, p);
+            path.remove(0);
+        }
     }
-    return res;
-  }
   
   private void getPath(String word, HashMap<String, List<String>> parents, List<String> cur) {
     if (word.equals(beginWord)) {
