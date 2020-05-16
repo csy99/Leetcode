@@ -19,7 +19,7 @@ public class Q081_Search_in_Rotated_Sorted_Array_II {
       int mid = l + (r-l)/2;
       if (nums[mid] == target)
         return true;
-      if (nums[l] == nums[mid] && nums[mid] == nums[r])  // no enough info!!!
+      if (nums[l] == nums[r])  // no enough info!!!
         l++;
       else if (nums[l] <= nums[mid]) {  // the left part of the array is unrotated
         if (nums[l] <= target && target < nums[mid])
