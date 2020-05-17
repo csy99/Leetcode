@@ -24,4 +24,22 @@ class Solution {
         }
         return l;
     }
+    
+    // bucket sort
+    public int smallestDistancePair(int[] nums, int k) {
+        Arrays.sort(nums);
+        int n = nums.length;
+        int max = nums[n-1];
+        int[] dist = new int[max+1];
+        for (int i = 0; i < n; i++) 
+            for (int j = i+1; j < n; j++) 
+                dist[nums[j] - nums[i]]++;
+        int cnt = 0;
+        for (int i = 0; i < max+1; i++) {
+            cnt += dist[i];
+            if (cnt >= k)
+                return i;
+        }
+        return -1;
+    }
 }
