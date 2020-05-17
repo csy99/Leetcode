@@ -10,27 +10,31 @@ import Leetcode.Util.ListNode;
  * Add the two numbers and return it as a linked list.
  */
 public class Q002_Add_Two_Numbers {
-  public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-    int carry = 0;
-    ListNode dum = new ListNode(-1);
-    ListNode runner = dum;
-    while (l1 != null || l2 != null) {
-      int a = l1 == null ? 0 : l1.val;
-      int b = l2 == null ? 0 : l2.val;
-      int res = (a + b + carry)%10;
-      carry = (a + b + carry)/10;
-      ListNode tmp =  new ListNode(res);
-      runner.next = tmp;
-      runner = runner.next;
-      if (l1 != null)
-        l1 = l1.next;
-      if (l2 != null)
-        l2 = l2.next;
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        int carry = 0;
+        ListNode dummy = new ListNode(-1);
+        ListNode pre = dummy;
+        while (l1 != null || l2 != null) {
+            int a = 0;
+            int b = 0;
+            if (l1 != null) {
+                a = l1.val;
+                l1 = l1.next;
+            }
+            if (l2 != null) {
+                b = l2.val;
+                l2 = l2.next;
+            } 
+            int v = (a + b + carry) % 10;
+            carry = (a + b + carry) / 10;
+            ListNode cur = new ListNode(v);
+            pre.next = cur;
+            pre = cur;
+        }
+        if (carry > 0) {
+            ListNode last = new ListNode(carry);
+            pre.next = last;
+        }
+        return dummy.next;
     }
-    if (carry == 1) {
-      ListNode tmp = new ListNode(1);
-      runner.next = tmp;
-    }
-    return dum.next;
-  }
 }
