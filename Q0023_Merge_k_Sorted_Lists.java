@@ -49,3 +49,49 @@ public class Q023_Merge_k_Sorted_Lists {
     return dum.next;
   }  
 }
+
+// priority queue
+// time: O(n*log k), space: O(k)
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists.length == 0)
+            return null;
+        ListNode dum = new ListNode(0);
+        ListNode pre = dum;
+        PriorityQueue<Node> pq = new PriorityQueue(new Comparator<Node>() {
+            public int compare(Node a, Node b) {
+                return a.listNode.val - b.listNode.val;
+            }
+        });
+        for (int i = 0; i < lists.length; i++) {
+            if (lists[i] == null) continue;
+            Node a = new Node(lists[i], i);
+            lists[i] = lists[i].next;
+            pq.add(a);
+        }
+        while (pq.size() > 0) {
+            Node cur = pq.poll();
+            pre.next = cur.listNode;
+            pre = cur.listNode;
+            int idx = cur.idx;
+            if (lists[idx] != null) {
+                ListNode toBeAdded = lists[idx];
+                lists[idx] = lists[idx].next;
+                Node tmp = new Node(toBeAdded, idx);
+                pq.add(tmp);
+            }
+        }
+        return dum.next;
+    }
+    
+}
+
+class Node {
+    ListNode listNode;
+    int idx;
+    
+    public Node(ListNode c, int i) {
+        listNode = c;
+        idx = i;
+    }
+}
