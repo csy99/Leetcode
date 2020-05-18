@@ -3,60 +3,67 @@ package Leetcode;
 import Leetcode.Util.TreeNode;
 
 /**
- * Created by rbhatnagar2 on 1/15/17.
+ * Created by csy99 on 5/18/20.
  */
 public class Q501_Find_Mode_in_Binary_Search_Tree {
-    private int currVal;
-    private int currCount = 0;
-    private int maxCount = 0;
-    private int modeCount = 0;
-
-    private int[] modes;
-
+    // HashMap
+    int mostFreq = 0;
+    HashMap<Integer, Integer> freq = new HashMap();
+    List<Integer> modes = new ArrayList();
     public int[] findMode(TreeNode root) {
         inorder(root);
-        modes = new int[modeCount];
-        modeCount = 0;
-        currCount = 0;
-        inorder(root);
-        return modes;
+        int[] res = new int[modes.size()];
+        for (int i = 0; i < res.length; i++)
+            res[i] = modes.get(i);
+        return res;
     }
-
+    
     private void inorder(TreeNode root) {
-        TreeNode node = root;
-        while (node != null) {
-            if (node.left == null) {
-                handleValue(node.val);
-                node = node.right;
-            } else {
-                TreeNode prev = node.left;
-                while (prev.right != null && prev.right != node)
-                    prev = prev.right;
-                if (prev.right == null) {
-                    prev.right = node;
-                    node = node.left;
-                } else {
-                    prev.right = null;
-                    handleValue(node.val);
-                    node = node.right;
-                }
-            }
+        if (root == null)
+            return;
+        inorder(root.left);
+        int f = 1 + freq.getOrDefault(root.val, 0);
+        freq.put(root.val, f);
+        if (f > mostFreq) {
+            mostFreq = f;
+            modes = new ArrayList();
+            modes.add(root.val);
+        } else if (f == mostFreq) {
+            modes.add(root.val);
         }
+        inorder(root.right);
     }
 
-    private void handleValue(int val) {
-        if (val != currVal) {
-            currVal = val;
-            currCount = 0;
-        }
-        currCount++;
-        if (currCount > maxCount) {
-            maxCount = currCount;
-            modeCount = 1;
-        } else if (currCount == maxCount) {
-            if (modes != null)
-                modes[modeCount] = currVal;
-            modeCount++;
-        }
+    // count, space: O(1)
+    int mostFreq = 0;
+    int cnt = 0;
+    Integer prev = null;
+    List<Integer> modes = new ArrayList();
+    public int[] findMode(TreeNode root) {
+        inorder(root);
+        int[] res = new int[modes.size()];
+        for (int i = 0; i < res.length; i++)
+            res[i] = modes.get(i);
+        return res;
     }
+    
+    private void inorder(TreeNode root) {
+        if (root == null)
+            return;
+        inorder(root.left);
+        if (prev == null || prev != root.val) 
+            cnt = 1;
+        else
+            cnt++;
+        if (cnt > mostFreq) {
+            mostFreq = cnt;
+            modes = new ArrayList();
+            modes.add(root.val);
+        } else if (cnt == mostFreq) {
+            modes.add(root.val);
+        }
+        prev = root.val;
+        inorder(root.right);
+    }
+
 }
