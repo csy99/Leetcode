@@ -7,16 +7,21 @@ package Leetcode;
  * Given a string, find the length of the longest substring without repeating characters.
  */
 public class Q003_Longest_Substring_Without_Repeating_Characters {
-  public int lengthOfLongestSubstring(String s) {
-    int[] pos = new int[128];  // next valid place for each character
-    int maxLen = 0;
-    int l = 0;  // starting point of a valid substring
-    for (int r = 0; r < s.length(); r++) {
-      l = Math.max(l, pos[s.charAt(r)]);  // next pos of the seen character
-      maxLen = Math.max(maxLen, r-l+1);
-      pos[s.charAt(r)] = r+1;
+    public int lengthOfLongestSubstring(String s) {
+        int[] pos = new int[128];
+        int l = 0;
+        int r = 0;
+        int longest = 0;
+        while (r < s.length()) {
+            char c = s.charAt(r);
+            if (pos[c] <= l) {
+                pos[c] = r + 1;
+                longest = Math.max(longest, r-l+1);
+                r++;
+            } else{
+                l = pos[c];
+            }
+        }
+        return longest;
     }
-    return maxLen;
-  }
-
 }
