@@ -15,34 +15,25 @@ package Leetcode;
  * Created by csy99 on 3/20/20.
  */
 public class Q340_Longest_Substring_with_At_Most_K_Distinct_Characters {
-  // char frequency   
-  public int lengthOfLongestSubstringKDistinct(String s, int k) {
-    int maxLen = 0;
-    HashMap<Character, Integer> freq = new HashMap();
-    int l = 0, r = 0;
-    while (l < s.length()) {
-      while (r < s.length() && freq.size() < k+1) {
-        char ending = s.charAt(r);
-        if (freq.containsKey(ending))
-          freq.put(ending, freq.get(ending)+1);
-        else {
-          if (freq.size() == k)  // can't add a diff char
-            break;
-          freq.put(ending, 1);
+    public int lengthOfLongestSubstringKDistinct(String s, int k) {
+        if (s.isEmpty()) return 0;
+        int l = 0;
+        int r = 0;
+        int longest = 0;
+        HashMap<Character, Integer> pos = new HashMap();
+        while (r < s.length()) {
+            pos.put(s.charAt(r), r);
+            r++;
+            if (pos.size() > k) {
+                int last = s.length();
+                for (char key: pos.keySet()) 
+                    last = Math.min(last, pos.get(key));
+                pos.remove(s.charAt(last));
+                l = last+1;
+            }
+            if (r-l > longest)
+                longest = r-l;
         }
-        r++;
-      }
-      maxLen = Math.max(maxLen, r-l);
-      // move left pointer, and update the frequency HashMap
-      char starting = s.charAt(l);
-      if (freq.containsKey(starting)) {
-        if (freq.get(starting) == 1)
-          freq.remove(starting);
-        else
-          freq.put(starting, freq.get(starting)-1);
-      }
-      l++;
+        return longest;
     }
-    return maxLen;
-  }
 }
