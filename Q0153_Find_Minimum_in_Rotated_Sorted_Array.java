@@ -26,24 +26,20 @@ public class Q153_Find_Minimum_in_Rotated_Sorted_Array {
     return nums[l];
   }
     
-  // recursion
-  // time: O(log n), space: O(log n)
-  // The time complexity is O(log n), because in each recursion, there will be at least
-  // one part of the array is sorted. Returning the min value of a sorted array is O(1).
-  public int findMin(int[] nums) {
-    if (nums == null || nums.length == 0)
-      return -1;
-    return findMin(nums, 0, nums.length - 1);     
-  }
+    // recursion
+    // time: O(log n), space: O(log n)
+    // The time complexity is O(log n), because in each recursion, there will be at least
+    // one part of the array is sorted. Returning the min value of a sorted array is O(1).
+    public int findMin(int[] nums) {
+        return findMin(nums, 0, nums.length - 1);     
+    }
   
-  private int findMin(int[]nums, int l, int r) {
-    if (l == r)  // only 1 element in the array
-      return nums[l];
-    if (l+1 == r)  // only 2 element in the array
-      return Math.min(nums[l], nums[r]);
-    if (nums[l] < nums[r])  // the array is sorted
-      return nums[l];
-    int mid = l + (r-l)/2;
-    return Math.min(findMin(nums, l, mid), findMin(nums, mid+1, r));
-  }
+    private int findMin(int[]nums, int l, int r) {
+        if (l == r)  // only 1 element in the array
+            return nums[l];
+        if (nums[l] < nums[r])
+            return nums[l];
+        int mid = l + (r-l)/2;
+        return Math.min(findMin(nums, l, mid), findMin(nums, mid+1, r));
+    }
 }
