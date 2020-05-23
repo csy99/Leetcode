@@ -25,16 +25,14 @@ package Leetcode;
  *
  */
 public class Q028_Implement_strStr {
-  public int strStr(String haystack, String needle) {
-    if (needle == null || needle.equals(""))
-      return 0;
-    if (haystack == null || haystack.length() < needle.length())
-      return -1;
-    int index = 0;
-    for (; index < haystack.length() - needle.length()+1; index++) {
-      if (haystack.substring(index, index+needle.length()).equals(needle))
-        return index;
+    public int strStr(String haystack, String needle) {
+        if (needle.isEmpty()) return 0;
+        int n = haystack.length();
+        int m = needle.length();
+        for (int i = 0; i <= n-m; i++) {
+            if (haystack.substring(i, i+m).equals(needle))
+                return i;
+        }
+        return -1;
     }
-    return -1;
-  }
 }
