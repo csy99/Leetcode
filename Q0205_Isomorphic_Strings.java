@@ -61,4 +61,25 @@ public class Q205_Isomorphic_Strings {
     }
     return true;
   }
+  
+    // ascii
+    public boolean isIsomorphic(String s, String t) {
+        if (s.isEmpty())  // always have same len
+            return true;
+        char[] key = new char[128];
+        char[] val = new char[128];
+        for (int i = 0; i < s.length(); i++) {
+            char c1 = s.charAt(i);
+            char c2 = t.charAt(i);
+            // check No two characters may map to the same character
+            if (key[c1] == '\0' && val[c2] == '\0') {
+                key[c1] = c2;
+                val[c2] = c1;
+            } else if (key[c1] == c2 && val[c2] == c1)
+                continue;
+            else
+                return false;
+        }
+        return true;
+    }
 }
