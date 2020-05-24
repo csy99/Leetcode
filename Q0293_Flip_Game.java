@@ -16,20 +16,21 @@ import java.util.List;
  */
 
 public class Q293_Flip_Game {
-  public List<String> generatePossibleNextMoves(String s) {
-    List<String> res = new ArrayList<>();
-    int idx = 0;
-    while (idx < s.length()) {
-      int nextStart = s.indexOf("++", idx);
-      if (nextStart == -1)
+    public List<String> generatePossibleNextMoves(String s) {
+        StringBuilder sb = new StringBuilder(s);
+        List<String> res = new ArrayList();
+        int i = 0;
+        while (i < s.length()-1) {
+            int idx = s.indexOf("++", i);
+            if (idx == -1)
+                break;
+            sb.setCharAt(idx, '-');
+            sb.setCharAt(idx+1, '-');
+            res.add(sb.toString());
+            sb.setCharAt(idx, '+');
+            sb.setCharAt(idx+1, '+');       
+            i = idx+1;
+        }
         return res;
-      StringBuilder sb = new StringBuilder();
-      sb.append(s.substring(0, nextStart));
-      sb.append("--");
-      sb.append(s.substring(nextStart+2));
-      res.add(sb.toString());
-      idx = nextStart+1;
     }
-    return res;
-  }
 }
