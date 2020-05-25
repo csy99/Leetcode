@@ -35,3 +35,34 @@ class Solution {
         return res;
     }
 }
+
+
+// modified version
+// space: O(mn)
+class Solution {
+    public int maxDotProduct(int[] nums1, int[] nums2) {
+        int m = nums1.length;
+        int n = nums2.length;
+        int[][] prod = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) 
+                prod[i][j] = nums1[i] * nums2[j];
+        }
+        int len = Math.min(m, n);
+        // use first i elements in nums1, first j elements in nums2
+        int[][] dp = new int[m+1][n+1];
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                dp[i][j] = prod[i-1][j-1];                
+                for (int k = 1; k <= len; k++) {
+                    dp[i][j] = Math.max(dp[i][j], dp[i-1][j-1] + prod[i-1][j-1]);
+                    if (i > 1) 
+                        dp[i][j] = Math.max(dp[i][j], dp[i-1][j]);
+                    if (j > 1) 
+                        dp[i][j] = Math.max(dp[i][j], dp[i][j-1]);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+}
