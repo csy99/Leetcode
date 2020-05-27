@@ -59,18 +59,19 @@ public class Q013_Roman_to_Integer {
     return 0;
   }
   
-  public int romanToInt(String s) {
-    if (s == null || s.length() == 0) return 0;
-    int res = 0;
-    if (s.indexOf("CM") >= 0) res -= 200;
-    if (s.indexOf("CD") >= 0) res -= 200;
-    if (s.indexOf("XC") >= 0) res -= 20;
-    if (s.indexOf("XL") >= 0) res -= 20;
-    if (s.indexOf("IX") >= 0) res -= 2;
-    if (s.indexOf("IV") >= 0) res -= 2;
-    for (char c: s.toCharArray()) {
-      res += convert(c);
+    public int romanToInt(String s) {
+        if (s.length() == 0)
+            return 0;
+        int res = 0;
+        int pre = 2000;
+        
+        for (int i = 0; i < s.length(); i++) {
+            int cur = convert(s.charAt(i));
+            res += cur;
+            if (cur > pre)
+                res -= 2*pre;
+            pre = cur;
+        }
+        return res;
     }
-    return res;
-  }
 }
