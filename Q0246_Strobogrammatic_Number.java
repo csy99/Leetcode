@@ -39,23 +39,22 @@ public class Q246_Strobogrammatic_Number {
     }
     
     public boolean isStrobogrammatic(String num) {
-        Map<Character, Character> map = new HashMap<Character, Character>();
+        HashMap<Character, Character> map = new HashMap();
         map.put('0', '0');
         map.put('1', '1');
         map.put('6', '9');
         map.put('8', '8');
         map.put('9', '6');
-
-        int start = 0, end = num.length() - 1;
-        while (start <= end) {
-            //if start and end digits are not in map, return false
-            if (!map.containsKey(num.charAt(start)) || !map.containsKey(num.charAt(end)) )
+        if (num.length() == 0) return true;
+        int l = 0;
+        int r = num.length()-1;
+        while (l <= r) { 
+            char left = num.charAt(l);
+            // if start and end digits are not in map, return false
+            if (map.getOrDefault(left, '*') != num.charAt(r))
                 return false;
-            if (num.charAt(start) != map.get(num.charAt(end)))
-                return false;
-
-            start++;
-            end--;
+            l++;
+            r--;
         }
         return true;
     }
