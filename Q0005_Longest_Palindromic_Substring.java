@@ -11,29 +11,30 @@ package Leetcode;
  * Note: "aba" is also a valid answer.
  */
 public class Q0005_Longest_Palindromic_Substring {
-  public String longestPalindrome(String s) {
-    if (s == null || s.length() == 0) return "";
-    boolean[][] isP = new boolean[s.length()][s.length()];
-    int start = 0;
-    int len = 1; 
-    for (int i = 0; i < s.length(); i++)  // only one char
-      isP[i][i] = true;
-    for (int i = 0; i < s.length() - 1; i++) {  // two chars
-      if (s.charAt(i) == s.charAt(i+1)) {
-        isP[i][i+1] = true;
-        start = i; 
-        len = 2;
-      }
-    }
-    for (int l = 3; l < s.length()+1 ; l++) {
-      for (int i = 0; i+l-1 < s.length(); i++) {
-        if (isP[i+1][i+l-2] && s.charAt(i) == s.charAt(i+l-1)) {
-          isP[i][i+l-1] = true;
-          start = i;
-          len = l;
+    public String longestPalindrome(String s) {
+        int n = s.length();
+        if (n == 0) return "";
+        // isPa[i][j] true if s[i~j] is palindrome
+        boolean[][] isPa = new boolean[n][n];
+        int l = 0;
+        int longest = 1;
+        for (int idx = 0; idx < n; idx++)  // one char is palidrome
+            isPa[idx][idx] = true;
+        for (int len = 2; len <= n; len++) {
+            for (int i = 0; i <= n-len; i++) {
+                int j = i+len-1;
+                if (s.charAt(i) != s.charAt(j))
+                    continue;
+                if (len == 2) 
+                    isPa[i][j] = true;
+                else
+                    isPa[i][j] = isPa[i+1][j-1];
+                if (isPa[i][j] == true) {
+                    longest = len;
+                    l = i;
+                }
+            }
         }
-      }
+        return s.substring(l, l+longest);
     }
-    return s.substring(start, start+len);
-  }
 }
