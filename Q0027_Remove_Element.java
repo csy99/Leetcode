@@ -1,7 +1,7 @@
 package Leetcode;
 
 /**
- * Created by rbhatnagar2 on 1/12/17.
+ * Created by csy99 on 1/12/17.
  * <p>
  * Given an array and a value, remove all instances of that value in place and return the new length.
  * Do not allocate extra space for another array, you must do this in place with constant memory.
@@ -28,14 +28,11 @@ package Leetcode;
  */
 public class Q027_Remove_Element {
     public int removeElement(int[] nums, int val) {
-        int count = 0;
+        int pos = 0;
         for (int i = 0; i < nums.length; i++) {
-            if (nums[i] != val) {
-                nums[count] = nums[i];
-                count++;
-            }
+            if (nums[i] != val) 
+                nums[pos++] = nums[i];
         }
-
-        return count;
+        return pos;
     }
 }
