@@ -1,7 +1,7 @@
 package Leetcode;
 
 /**
- * Created by rbhatnagar2 on 1/12/17.
+ * Created by csy99 on 5/30/20.
  *
  * Given a sorted array nums, remove the duplicates in-place such that
  * each element appear only once and return the new length.
@@ -27,24 +27,15 @@ package Leetcode;
  */
 public class Q026_Remove_Duplicates_from_Sorted_Array {
     public int removeDuplicates(int[] nums) {
-        if (nums.length < 2)
-            return 1;
-
-        int curr = 1;
+        if (nums.length <= 1)
+            return nums.length;
+        int count = 1;
         for (int i = 1; i < nums.length; i++) {
-            if (nums[i] != nums[i - 1]) {
-                nums[curr] = nums[i];
-                curr++;
+            if (nums[i] != nums[i-1]) {
+                nums[count] = nums[i];
+                count++;
             }
         }
-        return curr;
-    }
-
-    public int removeDuplicatesSmart(int[] nums) {
-        int i = 0;
-        for (int n : nums)
-            if (i < 1 || n > nums[i - 1])
-                nums[i++] = n;
-        return i;
+        return count;
     }
 }
