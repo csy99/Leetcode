@@ -1,7 +1,7 @@
 package Leetcode;
 
 /**
- * Created by rbhatnagar2 on 3/15/17.
+ * Created by csy99 on 5/30/20.
  * <p>
  * Suppose you are at a party with n people (labeled from 0 to n - 1) and among them,
  * there may exist one celebrity.
@@ -24,37 +24,21 @@ package Leetcode;
  * If there is no celebrity, return -1.
  */
 public class Q277_Find_the_Celebrity {
-    /**
-     * O(n)
-     * @param n
-     * @return
-     */
+    // time: O(n)
     public int findCelebrity(int n) {
-        if (n <= 1) {
-            return -1;
+        if (n == 0) return -1;
+        int celebrity = 0;
+        for (int i = 1; i < n; i++) {
+            if (i == celebrity) continue;
+            if (!knows(i, celebrity))
+                celebrity = i;
         }
-
-        int left = 0;
-        int right = n - 1;
-
-        // Step 1: Find the potential candidate
-        while (left < right) {
-            if (knows(left, right)) {
-                left++;
-            } else {
-                right--;
-            }
-        }
-
-        // Step 2: Validate the candidate
-        int candidate = right;
         for (int i = 0; i < n; i++) {
-            if (i != candidate && (!knows(i, candidate) || knows(candidate, i))) {
+            if (i == celebrity) continue;
+            if (!knows(i, celebrity) || knows(celebrity, i))
                 return -1;
-            }
         }
-
-        return candidate;
+        return celebrity;
     }
 
     /**
