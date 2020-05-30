@@ -1,7 +1,7 @@
 package Leetcode;
 
 /**
- * Created by csy99 on 1/12/17.
+ * Created by csy99 on 3/1/20.
  * <p>
  * Given an array and a value, remove all instances of that value in place and return the new length.
  * Do not allocate extra space for another array, you must do this in place with constant memory.
