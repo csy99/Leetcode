@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by rbhatnagar2 on 1/15/17.
+ * Created by csy99 on 5/31/20.
  *
  * Given an array of integers, find if the array contains any duplicates.
  *
@@ -26,17 +26,12 @@ import java.util.Set;
  */
 public class Q217_Contains_Duplicate {
     public boolean containsDuplicate(int[] nums) {
-        if (nums == null || nums.length == 0)
+        if (nums.length < 2)
             return false;
-        Set<Integer> _set = new HashSet<Integer>();
-
-        for (int n : nums) {
-            if (_set.contains(n))
+        Arrays.sort(nums);
+        for (int i = 1; i < nums.length; i++)
+            if (nums[i] == nums[i-1])
                 return true;
-            else {
-                _set.add(n);
-            }
-        }
         return false;
     }
 }
