@@ -1,7 +1,7 @@
 package Leetcode;
 
 /**
- * Created by rbhatnagar2 on 3/15/17.
+ * Created by csy99 on 5/31/20.
  * <p>
  * This is a follow-up problem of Shortest Word Distance.
  * The only difference is now word1 could be the same as word2.
