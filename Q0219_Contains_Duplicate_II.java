@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by csy99 on 2/23/2020
+ * Created by csy99 on 2/23/2020.
  *
  * Given an array of integers and an integer k,
  * find out whether there are two distinct indices i and j in the array
