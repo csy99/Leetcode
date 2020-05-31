@@ -26,4 +26,30 @@ public class Q220_Contains_Duplicate_III {
     }
     return false;
   }
+  
+  
+    // bucket sort
+    long width;
+    public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        if (t < 0) return false;
+        Map<Long, Long> map = new HashMap();
+        width = (long)t + 1;
+        for (int i = 0; i < nums.length; i++) {
+            long id = getId(nums[i]);
+            if (map.containsKey(id))
+                return true;
+            if (map.containsKey(id-1) && nums[i]-map.get(id-1)<width)
+                return true;
+            if (map.containsKey(id+1) && map.get(id+1)-nums[i]<width)
+                return true;
+            map.put(id, (long)nums[i]);
+            if (i >= k)
+                map.remove(getId(nums[i-k]));
+        }
+        return false;
+    }
+    
+    private long getId(long i) {
+        return i < 0 ? (i+1)/width-1 : i/width;
+    }
 }
