@@ -14,7 +14,7 @@ public class Q045_Jump_Game_II {
       int nextMax = 0;
       int step = 0;
       int index = 0;
-      while (index <= curMax) {
+      while (index <= curMax) {  // can deal with cases where last index not reachable
         while (index <= curMax) {
           nextMax = Math.max(nextMax, index + nums[index]);
           index ++;
