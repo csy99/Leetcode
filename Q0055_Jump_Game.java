@@ -10,16 +10,12 @@ package Leetcode;
  * https://leetcode.com/problems/jump-game/
  */
 public class Q055_Jump_Game {
-  public boolean canJump(int[] nums) {
-      if (nums.length < 2)
+    public boolean canJump(int[] nums) {
+        int furthest = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (i > furthest) return false;
+            furthest = Math.max(furthest, nums[i]+i);
+        }
         return true;
-      int reach = 0;
-      for (int i = 0; i < nums.length && i <= reach; i++) {
-        reach = Math.max(reach, nums[i] + i);
-        
-        if (reach >= nums.length - 1)
-          return true;
-      }
-      return false;
-  }
+    }
 }
