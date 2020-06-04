@@ -10,20 +10,13 @@ package Leetcode;
  */
 public class Q280_Wiggle_Sort {
     public void wiggleSort(int[] nums) {
-      for (int i = 0; i < nums.length - 1; i++) {
-        if (i % 2 == 0) {
-          if (nums[i] > nums[i+1]) {
+        if (nums.length < 2)
+            return;
+        Arrays.sort(nums);
+        for (int i = 1; i < nums.length-1; i += 2) {
             int tmp = nums[i];
             nums[i] = nums[i+1];
             nums[i+1] = tmp;
-          }
-        } else {
-          if (nums[i] < nums[i+1]) {
-            int tmp = nums[i];
-            nums[i] = nums[i+1];
-            nums[i+1] = tmp;
-          }
         }
-      }
     }
 }
