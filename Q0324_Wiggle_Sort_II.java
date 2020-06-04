@@ -4,7 +4,7 @@ package Leetcode;
  * Created by csy99 on 3/15/20.
  */
 public class Q324_Wiggle_Sort_II {
-  // time: O(n), space: O(n)
+  // time: O(n*logn), space: O(n)
   public void wiggleSort(int[] nums) {
     Arrays.sort(nums);
     int l = (nums.length-1)/2;  // smaller part of the array
