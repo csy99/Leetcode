@@ -21,16 +21,16 @@ public class Q121_Best_Time_to_Buy_and_Sell_Stock {
     
     // dp, time: O(n), space: O(1)
     public int maxProfit(int[] prices) {
-        if (prices.length <= 1)
+        if (prices.length < 2)
             return 0;
-        int max = 0;
-        int lowest = Integer.MAX_VALUE;
-        for (int i = 1; i < prices.length; i++) {
-            int lowTillNow = Math.min(lowest, prices[i-1]);
-            if (prices[i] - lowTillNow > max)
-                max = prices[i] - lowTillNow;
-            lowest = lowTillNow;
+        int preLow = Integer.MAX_VALUE;
+        int profit = 0;
+        for (int i = 0; i < prices.length; i++) {
+            if (prices[i] > preLow)
+                profit = Math.max(profit, prices[i]-preLow);
+            else
+                preLow = prices[i];
         }
-        return max;
+        return profit;
     }
 }
