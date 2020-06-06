@@ -50,31 +50,23 @@ public class Q123_Best_Time_to_Buy_and_Sell_Stock_III {
         return profit;
     }
 
-    // known bugs: [2,1,2,0,1]
     public int maxProfit(int[] prices) {
         int n = prices.length;
         if (n < 2) return 0;
-        // dp[i][j]: max profit sell on day i with j transactions
-        int[][] hold = new int[n][2]; 
-        int[][] sold = new int[n][2];
-        int[][] rest = new int[n][2];
-        for (int i = 0; i < n; i++) {
-            hold[i][0] = -prices[0];
-            hold[i][1] = -prices[0];
-        }
+        // dp[i][j]: in i-th day using j transaction
+        int K = 2;
+        int[][] hold = new int[n][K+1];
+        int[][] notHold = new int[n][K+1];
+        for (int j = 0; j <= K; j++)
+            hold[0][j] = -prices[0];
         for (int i = 1; i < n; i++) {
-            rest[i][0] = Math.max(rest[i-1][0], sold[i-1][0]);
-            hold[i][0] = Math.max(rest[i-1][0]-prices[i], hold[i-1][0]);
-            sold[i][0] = hold[i-1][0] + prices[i];
-            if (i > 1) {
-                // sold yesterday buy today
-                hold[i][1] = Math.max(hold[i][1], sold[i-1][0]-prices[i]); 
-                if (i > 2) {
-                    hold[i][1] = Math.max(rest[i-1][1]-prices[i], hold[i-1][1]);
-                    rest[i][1] = Math.max(rest[i-1][1], sold[i-1][1]);
-                    sold[i][1] = hold[i-1][1] + prices[i];
-                }
+            for (int j = 1; j <= K; j++) {
+                notHold[i][j] = Math.max(notHold[i-1][j], hold[i-1][j]+prices[i]);
+                hold[i][j] = Math.max(hold[i-1][j], notHold[i-1][j-1]-prices[i]);
             }
         }
-        return Math.max(Math.max(rest[n-1][0], rest[n-1][1]), Math.max(sold[n-1][0], sold[n-1][1]));
+        int res = 0;
+        for (int j = 0; j <= K; j++)
+            res = Math.max(res, notHold[n-1][j]);
+        return res;
     }
