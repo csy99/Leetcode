@@ -1,7 +1,7 @@
 package Leetcode;
 
 /**
- * Created by rbhatnagar2 on 1/15/17.
+ * Created by csy99 on 6/6/20.
  */
 public class Q334_Increasing_Triplet_Subsequence {
   // Greedy  
