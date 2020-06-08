@@ -5,6 +5,7 @@ package Leetcode;
  */
 public class Q287_Find_the_Duplicate_Number {
     // linked list, cycle detection 
+    // time: O(n), space:O(1)
     public int findDuplicate(int[] nums) {
       int slow = nums[0];
       int fast = nums[0];
@@ -25,6 +26,7 @@ public class Q287_Find_the_Duplicate_Number {
     
     
     // binary search
+    // time: O(n logn), space:O(1)
     public int findDuplicate(int[] nums) {
       int len = nums.length;
       int n = len - 1;
@@ -50,5 +52,30 @@ public class Q287_Find_the_Duplicate_Number {
         }
       }
       return left;
+    }
+    
+    // two traversals
+    // time: O(n), space:O(1)
+    public int findDuplicate(int[] nums) {
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            int num = nums[i];
+            if (num-1 == i) continue;
+            if (nums[num-1] == num)
+                return num;
+            int tmp = nums[num-1];
+            nums[num-1] = nums[i];
+            nums[i] = tmp;
+        }
+        for (int i = 0; i < n; i++) {
+            int num = nums[i];
+            if (num-1 == i) continue;
+            if (nums[num-1] == num)
+                return num;
+            int tmp = nums[num-1];
+            nums[num-1] = nums[i];
+            nums[i] = tmp;
+        }
+        return -1;
     }
 }
