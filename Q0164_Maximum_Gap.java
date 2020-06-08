@@ -2,47 +2,39 @@
  * Created by csy99 on 3/9/20.
  */
 public class Q164_Maximum_Gap {
-    private class Pair {
-        private int min, max;
-
-        public Pair(int min, int max) {
-            this.min = min;
-            this.max = max;
-        }
-    }
-
     public int maximumGap(int[] nums) {
-        if (nums == null || nums.length < 2)
-            return 0;
-
-        int min = nums[0];
-        int max = nums[0];
-        for (int i = 1; i < nums.length; i++) {
-            min = Math.min(min, nums[i]);
-            max = Math.max(max, nums[i]);
+        int n = nums.length;
+        if (n < 2) return 0;
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        for (int num: nums) {
+            min = Math.min(min, num);
+            max = Math.max(max, num);
         }
-
-        double gap = ((double) max - min) / nums.length;
-        Pair[] bucket = new Pair[nums.length];
-        for (int i = 0; i < nums.length; i++) { // put all elements into different bucket
-            int idx = (int) Math.ceil((nums[i] - min) / gap) - 1;
-            idx = Math.max(0, idx); // the min value should be put into the first bucket
-            Pair p = bucket[idx];
-            if (p == null) {
-                bucket[idx] = new Pair(nums[i], nums[i]);
+        double gap = (max-min)/(double)n;
+        Integer[][] buckets = new Integer[n][2];
+        for (int num: nums) {
+            int idx = (int)((num-min)/gap);
+            if (num == max) idx = n-1;
+            Integer[] range = buckets[idx];
+            if (range[0] == null) {
+                range[0] = num;
+                range[1] = num;
             } else {
-                p.min = Math.min(p.min, nums[i]);
-                p.max = Math.max(p.max, nums[i]);
+                range[0] = Math.min(range[0], num);
+                range[1] = Math.max(range[1], num);
             }
         }
-
         int res = 0;
-        int prevMax = bucket[0].max;
-        for (int pos = 1; pos < nums.length; pos++) {
-            if (bucket[pos] == null)
-                continue;
-            res = Math.max(res, bucket[pos].min - prevMax);
-            prevMax = bucket[pos].max;
+        int prevLargest = -1;
+        int i = 0;
+        while (buckets[i][0] == null)
+            i++;
+        prevLargest = buckets[i][1];
+        for (i = i+1; i < n; i++) {
+            if (buckets[i][0] == null) continue;
+            res = Math.max(res, buckets[i][0] - prevLargest);
+            prevLargest = buckets[i][1];
         }
         return res;
     }
