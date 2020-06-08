@@ -28,30 +28,26 @@ public class Q287_Find_the_Duplicate_Number {
     // binary search
     // time: O(n logn), space:O(1)
     public int findDuplicate(int[] nums) {
-      int len = nums.length;
-      int n = len - 1;
-      
-      int left = 1;
-      int right = n;
-      while (left < right) {
-        int mid = left + (right - left)/2;
-        int countLeft = 0;
-        int countMid = 0;
-        for (int i = 0; i < len; i++) {
-          if (nums[i] < mid)
-            countLeft++;
-          else if (nums[i] == mid)
-            countMid++;
+        int n = nums.length-1;
+        int left = 1;
+        int right = n;
+        while (left < right) {
+            int cntLeft = 0;
+            int cntMid = 0;
+            int mid = (left+right)/2;
+            for (int num: nums) {
+                if (num < mid)
+                    cntLeft++;
+                else if (num == mid)
+                    cntMid++;
+            }
+            if (cntMid > 1) return mid;
+            if (cntLeft > mid-1)  // the dup value is smaller than mid
+                right = mid;
+            else
+                left = mid+1;
         }
-        if (countMid > 1)
-          return mid;
-        if (countLeft > mid - 1) {  // the dup value is smaller than mid
-          right = mid - 1;
-        } else {
-          left = mid + 1;
-        }
-      }
-      return left;
+        return left;
     }
     
     // two traversals (modified the array)
