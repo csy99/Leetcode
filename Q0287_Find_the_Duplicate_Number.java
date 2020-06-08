@@ -54,7 +54,7 @@ public class Q287_Find_the_Duplicate_Number {
       return left;
     }
     
-    // two traversals
+    // two traversals (modified the array)
     // time: O(n), space:O(1)
     public int findDuplicate(int[] nums) {
         int n = nums.length;
