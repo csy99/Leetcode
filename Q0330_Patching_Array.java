@@ -1,25 +1,22 @@
 package Leetcode;
 
 /**
- * Created by rbhatnagar2 on 1/15/17.
+ * Created by csy99 on 6/9/20.
  */
 public class Q330_Patching_Array {
     public int minPatches(int[] nums, int n) {
         long miss = 1;
-        int count = 0;
+        int added = 0;
         int i = 0;
-
         while (miss <= n) {
-            if (i < nums.length && nums[i] <= miss) {
-                miss = miss + nums[i];
-                i++;
-            } else {
+            if (i < nums.length && nums[i] <= miss)
+                miss += nums[i++];
+            else {
                 miss += miss;
-                count++;
+                added++;
             }
         }
-
-        return count;
+        return added;
     }
     
 /**
