@@ -26,22 +26,13 @@ public class Q252_Meeting_Rooms {
  */
     
     public boolean canAttendMeetings(List<Interval> intervals) {
-      if (intervals == null || intervals.size() <= 1)
-        return true;
-      Collections.sort(intervals, new Comparator<Interval>(){
-        public int compare(Interval i1, Interval i2) {
-          return Integer.compare(i1.start, i2.start);
+        int n = intervals.size();
+        if (n <= 1) return true;
+        Collections.sort(intervals, (a,b)->(a.start-b.start));
+        for (int i = 1; i < n; i++) {
+            if (intervals.get(i).start < intervals.get(i-1).end)
+                return false;
         }
-      });
-      int start = intervals.get(0).start;
-      int end = intervals.get(0).end;
-      for (int i = 1; i < intervals.size(); i++) {
-        Interval interval = intervals.get(i);
-        if (interval.start < end)
-          return false;
-        start = interval.start;
-        end = interval.end;
-      }
-      return true;
+        return true;
     }
 }
