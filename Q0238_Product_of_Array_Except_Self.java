@@ -5,26 +5,28 @@ package Leetcode;
  */
 public class Q238_Product_of_Array_Except_Self {
     public int[] productExceptSelf(int[] nums) {
-      int product = 1;
-      int numZero = 0;
-      for (int i = 0; i < nums.length; i++) {
-        if (nums[i] == 0)
-          numZero++;
-        else
-          product *= nums[i];
-      }
-      int[] res = new int[nums.length];
-      for (int i = 0; i < nums.length; i++) {
-        if (nums[i] != 0 && numZero == 0)
-          res[i] = product/nums[i];
-        else if (nums[i] != 0 && numZero != 0)
-          res[i] = 0;
-        else if (nums[i] == 0 && numZero == 1)  // only one zero in the array
-          res[i] = product;
-        else  // multiple zeros in the array
-          res[i] = 0;
-      }
-      return res;
+        int n = nums.length;
+        int[] product = new int[n];
+        int zeros = 0;
+        long total = 1;
+        int pos = 0;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == 0) {
+                zeros++;
+                pos = i;
+            } else
+                total *= nums[i];
+        }
+        if (zeros > 1)
+            return product;
+        if (zeros == 1) {
+            product[pos] = (int)total;
+            return product;
+        }
+        for (int i = 0; i < n; i++) {
+            product[i] = (int)(total/nums[i]);
+        }
+        return product;
     }
     
     /**
