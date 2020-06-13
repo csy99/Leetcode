@@ -18,19 +18,18 @@ package Leetcode;
 public class Q053_Maximum_Subarray {
     public int maxSubArray(int[] nums) {
         int n = nums.length;
-        // int[] sum = new int[n+1];
+        if (n == 0) return 0;
+        int maxSum = nums[0];
         int sum = 0;
-        int res = Integer.MIN_VALUE;
-        for (int i = 1; i <= n; i++) {
+        for (int i = 0; i < n; i++) {
             int cur = 0;
             if (sum > 0)
-                cur = sum + nums[i-1];
+                cur = sum + nums[i];
             else
-                cur = nums[i-1];
-            if (cur > res)
-                res = cur;
+                cur = nums[i];
+            maxSum = Math.max(maxSum, cur);
             sum = cur;
         }
-        return res;    
+        return maxSum;
     }
 }
