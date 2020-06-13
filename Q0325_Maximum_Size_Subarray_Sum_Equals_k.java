@@ -23,18 +23,19 @@ public class Q325_Maximum_Size_Subarray_Sum_Equals_k {
      * @return: the maximum length of a subarray that sums to k
      */
     public int maxSubArrayLen(int[] nums, int k) {
-      int maxLen = 0;
-      int sum = 0;
-      HashMap<Integer, Integer> history = new HashMap<>();
-      // if the maximal range starts from 0, we need to calculate sum(j) - sum(i - 1).
-      history.put(0, -1);
-      for(int i = 0; i < nums.length; i++) {
-        sum += nums[i];
-        if (!history.containsKey(sum))
-          history.put(sum, i);
-        if (history.containsKey(sum - k))
-          maxLen = Math.max(maxLen, i - history.get(sum - k));
-      }
-      return maxLen;
+        int n = nums.length;
+        if (n == 0) return 0;
+        int len = 0;
+        HashMap<Integer, Integer> map = new HashMap();
+        map.put(0, -1);
+        int sum = 0;
+        for (int i = 0; i < n; i++) {
+            sum += nums[i];
+            if (!map.containsKey(sum))
+                map.put(sum, i);
+            if (map.containsKey(sum-k))
+                len = Math.max(len, i-map.get(sum-k));
+        }
+        return len;
     }
 }
