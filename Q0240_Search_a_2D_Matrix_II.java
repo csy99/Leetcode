@@ -5,16 +5,16 @@ package Leetcode;
  */
 public class Q240_Search_a_2D_Matrix_II {
     public boolean searchMatrix(int[][] matrix, int target) {
-        if (matrix.length == 0 || matrix[0].length == 0) return false;
-        int i = 0, j = matrix[0].length - 1;
-
-        while (i < matrix.length && j >= 0) {
+        int m = matrix.length;
+        if (m == 0) return false;
+        int n = matrix[0].length;
+        if (n == 0) return false;
+        int j = n-1;
+        for (int i = 0; i < m; i++) {
+            while (j > 0 && matrix[i][j] > target)
+                j--;
             if (matrix[i][j] == target)
                 return true;
-            else if (matrix[i][j] < target)
-                i++;
-            else
-                j--;
         }
         return false;
     }
