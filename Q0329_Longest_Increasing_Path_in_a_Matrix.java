@@ -4,42 +4,30 @@ package Leetcode;
  * Created by csy99 on 3/31/20.
  */
 public class Q329_Longest_Increasing_Path_in_a_Matrix {
-  int[][] dist;
-  int m;
-  int n;
-  public int longestIncreasingPath(int[][] matrix) {
-    m = matrix.length;
-    if (m == 0) return 0;
-    n = matrix[0].length;
-    dist = new int[m][n];
-    int longest = 0;
-    for (int i = 0; i < m; i++) 
-      for (int j = 0; j < n; j++) 
-        longest = Math.max(longest, dfs(i, j, matrix));
-    return longest;
-  }
-  
-  private int dfs(int y, int x, int[][] matrix) {
-    if (dist[y][x] != 0) 
-      return dist[y][x];
-    dist[y][x] = 1;
-    int tmp;
-    if (y > 0 && matrix[y-1][x] > matrix[y][x]) {
-      tmp = dfs(y-1, x, matrix);
-      dist[y][x] = Math.max(dist[y][x], 1+tmp);
+    int m;
+    int n;
+    int[][] leng;
+    int[] dirs = {-1, 0, 1, 0, -1};
+    public int longestIncreasingPath(int[][] matrix) {
+        m = matrix.length;
+        if (m == 0) return 0;
+        n = matrix[0].length;
+        if (n == 0) return 0;
+        leng = new int[m][n];
+        int longest = 0;
+        for (int i = 0; i < m; i++)
+            for (int j = 0; j < n; j++)
+                longest = Math.max(longest, dfs(matrix, i, j, matrix[i][j]-1));
+        return longest;
     }
-    if (y < m-1 && matrix[y+1][x] > matrix[y][x]) {
-      tmp = dfs(y+1, x, matrix);
-      dist[y][x] = Math.max(dist[y][x], 1+tmp);
+    
+    private int dfs(int[][] matrix, int y, int x, int prev) {
+        if (y < 0 || x < 0 || y >= m || x >= n || matrix[y][x] <= prev)
+            return 0;
+        if (leng[y][x] > 0)
+            return leng[y][x];
+        for (int d = 0; d < 4; d++) 
+            leng[y][x] = Math.max(leng[y][x], 1+dfs(matrix, y+dirs[d], x+dirs[d+1], matrix[y][x]));
+        return leng[y][x];
     }
-    if (x > 0 && matrix[y][x-1] > matrix[y][x]) {
-      tmp = dfs(y, x-1, matrix);
-      dist[y][x] = Math.max(dist[y][x], 1+tmp);
-    }
-    if (x < n-1 && matrix[y][x+1] > matrix[y][x]) {
-      tmp = dfs(y, x+1, matrix);
-      dist[y][x] = Math.max(dist[y][x], 1+tmp);
-    }
-    return dist[y][x];
-  }
 }
