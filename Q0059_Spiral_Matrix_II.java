@@ -26,7 +26,7 @@ public class Q059_Spiral_Matrix_II {
       right--;
     }
     
-    if (left == right && left == right)
+    if (top == bot && left == right)
       mat[n/2][n/2] = num;
     return mat;
 }
