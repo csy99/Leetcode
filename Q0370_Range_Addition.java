@@ -27,21 +27,20 @@ public class Q370_Range_Addition {
     When we decrement the end + 1 index, we offset the increment
     so no increment is passed along to the next element.
      */
-  public int[] getModifiedArray(int length, int[][] updates) {
-    int[] tmp = new int[length + 1];
-    for (int[] range: updates) {
-      int start = range[0];
-      int end = range[1]+1;
-      int op = range[2];
-      tmp[start] += op;
-      tmp[end] -= op;
+    public int[] getModifiedArray(int length, int[][] updates) {
+        int[] res = new int[length];
+        for (int i = 0; i < updates.length; i++) {
+            int start = updates[i][0];
+            int end = updates[i][1];
+            int val = updates[i][2];
+            res[start] += val;
+            if (end+1 < length)
+                res[end+1] -= val;
+        }
+        for (int i = 1; i < length; i++)
+            res[i] += res[i-1];
+        return res;
     }
-    int[] res = new int[length];
-    res[0] = tmp[0];
-    for (int i = 1; i < length; i++)
-      res[i] = res[i-1] + tmp[i];
-    return res;  
-  }
 
     public static void main(String[] args) {
         int[][] updates = new int[][]{
