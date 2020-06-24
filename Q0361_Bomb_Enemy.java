@@ -9,45 +9,47 @@ package Leetcode;
  * since the wall is too strong to be destroyed. You can only put the bomb at an empty cell.
  */
 public class Q361_Bomb_Enemy {
-  public int maxKilledEnemies(char[][] grid) {
-    int m = grid.length;
-    if (m == 0) return 0;
-    int n = grid[0].length;
-    if (n == 0) return 0;
-    
-    int max = 0;
-    int[] fromUp = new int[n];
-    for (int i = 0; i < m; i++) {
-      int fromLeft = 0;  // enemies killed accumulated in the same row so far
-      for (int j = 0; j < n; j++) {
-        int total = 0;
-        if (grid[i][j] == '0') {
-          total = fromLeft + fromUp[j];
-          // check right
-          for (int k = j+1; k < n; k++) {
-            if (grid[i][k] == 'W')
-              break;
-            if (grid[i][k] == 'E')
-              total++;
-          }
-          // check down
-          for (int k = i+1; k < m; k++) {
-            if (grid[k][j] == 'W')
-              break;
-            if (grid[k][j] == 'E')
-              total++;
-          }
-          max = Math.max(max, total);
-        } else if (grid[i][j] == 'W') {
-          fromLeft = 0;
-          fromUp[j] = 0;
-        } else {  // an enemy
-          fromLeft++;
-          fromUp[j]++;
+    public int maxKilledEnemies(char[][] grid) {
+        int m = grid.length;
+        if (m == 0) return 0;
+        int n = grid[0].length;
+        if (n == 0) return 0;
+        int[][] top = new int[m][n];
+        int[][] bot = new int[m][n];
+        int[][] left = new int[m][n];
+        int[][] right = new int[m][n];
+        for (int i = 0; i < m; i++)
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 'W') 
+                    continue;
+                if (grid[i][j] == 'E') {
+                    top[i][j] = 1;
+                    left[i][j] = 1;
+                }
+                if (i > 0)
+                    top[i][j] += top[i-1][j];
+                if (j > 0)
+                    left[i][j] += left[i][j-1];
+            }
+        for (int i = m-1; i >= 0; i--) {
+            for (int j = n-1; j >= 0; j--) {
+                if (grid[i][j] == 'W')
+                    continue;
+                if (grid[i][j] == 'E') {
+                    bot[i][j] = 1;
+                    right[i][j] = 1;
+                }
+                if (i < m-1) 
+                    bot[i][j] += bot[i+1][j];
+                if (j < n-1)
+                    right[i][j] += right[i][j+1];
+            }
         }
-        
-      }
+        int res = 0;
+        for (int i = 0; i < m; i++) 
+            for (int j = 0; j < n; j++) 
+                if (grid[i][j] == '0')
+                    res = Math.max(res, top[i][j]+bot[i][j]+left[i][j]+right[i][j]);
+        return res;
     }
-    return max;
-  }
 }
