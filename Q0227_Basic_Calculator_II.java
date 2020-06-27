@@ -59,42 +59,32 @@ public class Q227_Basic_Calculator_II {
     return ret;
   }
 
+    // stack, time: O(n)
     public int calculate(String s) {
-
-        if (s == null || s.length() == 0)
-            return 0;
-
-        Stack<Integer> stack = new Stack<Integer>();
-        int num = 0;
+        Stack<Integer> nums = new Stack();
+        s = s.trim();
+        char[] arr = s.toCharArray();
         char sign = '+';
-
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-
-            if (Character.isDigit(c)) {
-                num = num * 10 + (c - '0');
-            }
-
-            if ((!Character.isDigit(c)) || i == s.length() - 1) {
-                if (sign == '-') {
-                    stack.push(-num);
-                } else if (sign == '+') {
-                    stack.push(num);
-                } else if (sign == '*') {
-                    stack.push(stack.pop() * num);
-                } else if (sign == '/') {
-                    stack.push(stack.pop() / num);
-                }
-                sign = s.charAt(i);
-                num = 0;
-            }
+        for (int i = 0; i < arr.length; i++) {
+            if (Character.isDigit(arr[i])) {
+                int num = arr[i] - '0';
+                while (i+1 < arr.length && Character.isDigit(arr[i+1])) 
+                    num = num*10 + (arr[++i]-'0');
+                if (sign == '+') 
+                    nums.push(num);
+                else if (sign == '-')
+                    nums.push(-num);
+                else if (sign == '*')
+                    nums.push(nums.pop() * num);
+                else if (sign == '/')
+                    nums.push(nums.pop() / num);
+            } else if (arr[i] == '+' || arr[i] == '-' || arr[i] == '*' || arr[i] == '/') 
+                sign = arr[i];
         }
-
-        int re = 0;
-        for (int i : stack) {
-            re += i;
-        }
-        return re;
+        int res = 0;
+        for (int num: nums)
+            res += num;
+        return res;
     }
 
     public static void main(String[] args) {
