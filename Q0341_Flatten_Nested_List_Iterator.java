@@ -23,36 +23,33 @@ import java.util.Stack;
  */
 
 public class Q341_Flatten_Nested_List_Iterator implements Iterator<Integer> {
-    Stack<NestedInteger> stack;
-
-    public Q341_Flatten_Nested_List_Iterator(List<NestedInteger> nestedList) {
-        stack = new Stack<NestedInteger>();
-        for (int i = nestedList.size() - 1; i >= 0; i--) {
-            stack.push(nestedList.get(i));
-        }
+    Stack<NestedInteger> st = new Stack();
+    
+    public NestedIterator(List<NestedInteger> nestedList) {
+        prepare(nestedList);
     }
 
     @Override
     public Integer next() {
-        return stack.pop().getInteger();
+        if (!hasNext())
+            return null;
+        return st.pop().getInteger();
     }
 
     @Override
     public boolean hasNext() {
-        while (!stack.isEmpty()) {
-            if (stack.peek().isInteger())
-                return true;
-            else {
-                NestedInteger head = stack.pop();
-                List<NestedInteger> list = head.getList();
-                for (int i = list.size() - 1; i >= 0; i--) {
-                    stack.push(list.get(i));
-                }
-            }
+        while (st.size() > 0 && !st.peek().isInteger()) {
+            List<NestedInteger> list = st.pop().getList();
+            prepare(list);
         }
-        return false;
+        return !st.isEmpty();
     }
-
+    
+    private void prepare(List<NestedInteger> list) {
+        for (int i = list.size()-1; i >= 0; i--)
+            st.push(list.get(i));
+    }
+    
     abstract class NestedInteger {
         public abstract boolean isInteger();
 
