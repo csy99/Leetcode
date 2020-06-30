@@ -11,21 +11,24 @@ import java.util.Queue;
 public class Q111_Minimum_Depth_of_Binary_Tree {
     // recusion
     public int minDepth(TreeNode root) {
-        return depth(root, 0);
+        if (root == null) 
+            return 0;
+        return traverse(root, 0);
     }
     
-    private int depth(TreeNode root, int d) {
-        if (root == null)
-            return d;
+    private int traverse(TreeNode root, int depth) {
         if (root.left == null && root.right == null)
-            return 1 + d;
-        if (root.right == null)
-            return 1 + depth(root.left, d);
+            return depth+1;
         else if (root.left == null)
-            return 1 + depth(root.right, d);
-        return 1 + Math.min(depth(root.left, d), depth(root.right, d));
+            return traverse(root.right, depth)+1;
+        else if (root.right == null)
+            return traverse(root.left, depth)+1;
+        int l = traverse(root.left, depth+1);
+        int r = traverse(root.right, depth+1);
+        return Math.min(l, r);
     }
 
+    // iteration
     public int minDepthIterative(TreeNode root) {
         if (root == null)
             return 0;
