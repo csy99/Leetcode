@@ -4,41 +4,37 @@ package Leetcode;
  * Created by csy99 on 5/12/20.
  */
 public class Q449_Serialize_and_Deserialize_BST {
-    // preorder
     public String serialize(TreeNode root) {
-        if (root == null)
-            return "";
         StringBuilder sb = new StringBuilder();
-        write(root, sb);
-        return sb.deleteCharAt(sb.length()-1).toString();
+        traverse(root, sb);
+        return sb.toString();
     }
     
-    private void write(TreeNode root, StringBuilder sb) {
+    private void traverse(TreeNode root, StringBuilder sb) {
         if (root == null)
             return;
-        sb.append(root.val).append(" ");
-        write(root.left, sb);
-        write(root.right, sb);
+        sb.append(root.val).append(",");
+        traverse(root.left, sb);
+        traverse(root.right, sb);
     }
 
     public TreeNode deserialize(String data) {
-        if (data == null || data.isEmpty())
-            return null;
-        String[] arr = data.split("\\s");
-        int[] pos = new int[1];  // need to be remembered
-        return build(arr, pos, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        if (data.isEmpty()) return null;
+        String[] arr = data.split(",");
+        return build(arr, 0, arr.length);
     }
     
-    private TreeNode build(String[] arr, int[] pos, int treeMin, int treeMax) {
-        if (pos[0] >= arr.length)
-            return null;
-        int v = Integer.parseInt(arr[pos[0]]);
-        if (v < treeMin || v > treeMax)
-            return null;
-        TreeNode cur = new TreeNode(v);
-        pos[0]++;
-        cur.left = build(arr, pos, treeMin, v);
-        cur.right = build(arr, pos, v, treeMax);
-        return cur;
+    // exclude r
+    private TreeNode build(String[] arr, int l, int r) {
+        if (l >= r) return null;
+        TreeNode root = new TreeNode(Integer.parseInt(arr[l]));
+        int pos = l + 1;
+        for (; pos < r; pos++) {
+            if (Integer.parseInt(arr[pos]) > root.val)
+                break;
+        }
+        root.left = build(arr, l+1, pos);  // 1~pos-1
+        root.right = build(arr, pos, r);
+        return root;
     }
 }
