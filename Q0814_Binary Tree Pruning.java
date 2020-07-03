@@ -3,22 +3,21 @@
  */
 class Solution {
     public TreeNode pruneTree(TreeNode root) {
-        if (checkAndPrune(root))
-            return root;
-        return null;
+        if (root == null) return root;
+        return check(root);
     }
     
-    private boolean checkAndPrune(TreeNode root) {
+    private TreeNode check(TreeNode root) {
         if (root == null)
-            return false;
-        boolean left = checkAndPrune(root.left);
-        boolean right = checkAndPrune(root.right);
-        if (!left)
-            root.left = null;
-        if (!right)
-            root.right = null;
-        if (root.val == 1)
-            return true;
-        return left || right;
+            return root;
+        root.left = check(root.left);
+        root.right = check(root.right);
+        if (root.left == null && root.right == null) {
+            if (root.val == 0)
+                return null; 
+            else
+                return root;
+        }
+        return root;
     }
 }
