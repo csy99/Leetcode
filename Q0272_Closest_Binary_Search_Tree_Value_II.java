@@ -1,7 +1,7 @@
 package Leetcode;
 
 /**
- * Created by rbhatnagar2 on 3/15/17.
+ * Created by csy99 on 7/7/20.
  */
 
 import Leetcode.Util.TreeNode;
@@ -29,40 +29,41 @@ import java.util.Stack;
  */
 
 public class Q272_Closest_Binary_Search_Tree_Value_II {
+    // two stacks, time: O(k + log n), space: O(n)
     public List<Integer> closestKValues(TreeNode root, double target, int k) {
         List<Integer> res = new ArrayList();
-
-        Stack<Integer> s1 = new Stack(); // predecessors
-        Stack<Integer> s2 = new Stack(); // successors
-
-        inorder(root, target, false, s1);
-        inorder(root, target, true, s2);
-
-        while (k-- > 0) {
-            if (s1.isEmpty())
-                res.add(s2.pop());
-            else if (s2.isEmpty())
-                res.add(s1.pop());
-            else if (Math.abs(s1.peek() - target) < Math.abs(s2.peek() - target))
-                res.add(s1.pop());
+        Stack<Integer> pred = new Stack();
+        Stack<Integer> succ = new Stack();
+        traverseSmaller(root, target, pred);
+        traverseLarger(root, target, succ);
+        
+        while (k > 0) {
+            k--;
+            if (pred.size() == 0)
+                res.add(succ.pop());
+            else if (succ.size() == 0)
+                res.add(pred.pop());
+            else if (Math.abs(pred.peek() - target) < Math.abs(succ.peek() - target))
+                res.add(pred.pop());
             else
-                res.add(s2.pop());
+                res.add(succ.pop());
         }
-
         return res;
     }
-
-    // inorder traversal
-    void inorder(TreeNode root, double target, boolean reverse, Stack<Integer> stack) {
-        if (root == null)
-            return;
-
-        inorder(reverse ? root.right : root.left, target, reverse, stack);
-        // early terminate, no need to traverse the whole tree
-        if ((reverse && root.val <= target) || (!reverse && root.val > target))
-            return;
-        // track the value of current node
-        stack.push(root.val);
-        inorder(reverse ? root.left : root.right, target, reverse, stack);
+  
+    private void traverseSmaller(TreeNode root, double target, Stack<Integer> pred) {
+        if (root == null) return;
+        traverseSmaller(root.left, target, pred);
+        if (root.val >= target) return;
+        pred.push(root.val);
+        traverseSmaller(root.right, target, pred);
+    }
+  
+    private void traverseLarger(TreeNode root, double target, Stack<Integer> succ) {
+        if (root == null) return;
+        traverseLarger(root.right, target, succ);
+        if (root.val < target) return;
+        succ.push(root.val);
+        traverseLarger(root.left, target, succ);
     }
 }
