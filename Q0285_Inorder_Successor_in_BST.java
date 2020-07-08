@@ -15,7 +15,7 @@ public class Q285_Inorder_Successor_in_BST {
       if (root == null || p == null) return null;
       if (p.right != null)
         return findMin(p.right);
-      // when p doesn't have right child, its parent should be its successor
+      // when p doesn't have right child, the lowest node whose left branch constains p should be its successor
       TreeNode runner = root;
       TreeNode suc = null;
       while (runner != null) {
