@@ -13,30 +13,32 @@ import java.util.List;
  * Collect and remove all leaves, repeat until the tree is empty.
  */
 public class Q366_Find_Leaves_of_Binary_Tree {
-  int maxHeight = 0;
-  HashMap<Integer, List<Integer>> heights = new HashMap();
-  
-  public List<List<Integer>> findLeaves(TreeNode root) {
-    height(root);
     List<List<Integer>> res = new ArrayList();
-    for (int h = 1; h <= maxHeight; h++) 
-      res.add(heights.get(h));
-    return res;
-  }
-  
-  private int height(TreeNode root) {
-    if(root == null) return 0;
-    int height = Math.max(height(root.left), height(root.right)) + 1;
-    if (heights.containsKey(height)) {
-      heights.get(height).add(root.val);
-    } else {
-      List<Integer> h = new ArrayList();
-      h.add(root.val);
-      heights.put(height, h);
+    
+    public List<List<Integer>> findLeaves(TreeNode root) {
+        traverse(root);
+        return res;
     }
-    maxHeight = Math.max(maxHeight, height);
-    return height;
-  }
+    
+    private int traverse(TreeNode root) {
+        if (root == null) return -1;
+        if (root.left == null && root.right == null) {
+            addToList(0, root);
+            return 0;
+        }
+        int left = traverse(root.left);
+        int right = traverse(root.right);
+        int level = Math.max(left, right) + 1;
+        addToList(level, root);
+        return level;
+    }
+    
+    private void addToList(int level, TreeNode root) {
+        while (res.size() <= level)
+            res.add(new ArrayList());
+        List<Integer> element = res.get(level);
+        element.add(root.val);
+    }
 
     public static void main(String[] args) {
         TreeNode a = new TreeNode(1);
