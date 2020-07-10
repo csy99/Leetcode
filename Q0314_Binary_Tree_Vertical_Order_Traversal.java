@@ -20,15 +20,37 @@ import java.util.Queue;
  */
 
 public class Q314_Binary_Tree_Vertical_Order_Traversal {
-  class Node {
-    TreeNode node;
-    int coord;
-    
-    public Node(TreeNode n, int c) {
-      node = n;
-      coord = c;
+    TreeMap<Integer, TreeMap<Integer, List<Integer>>> total = new TreeMap();
+    public List<List<Integer>> verticalOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList();
+        if (root == null) return res;
+        traverse(root, 0, 0);
+        for (Integer x: total.keySet()) {
+            TreeMap<Integer, List<Integer>> xLevel = total.get(x);
+            List<Integer> cur = new ArrayList();
+            for (Integer y: xLevel.keySet()) 
+                cur.addAll(xLevel.get(y));
+            res.add(cur);
+        }
+        return res;
     }
-  }
+    
+    private void traverse(TreeNode root, int x, int y) {
+        if (root == null)
+            return;
+        TreeMap<Integer, List<Integer>> xLevel = total.get(x);
+        if (xLevel == null)
+            xLevel = new TreeMap();
+        List<Integer> yLevel = xLevel.get(y);
+        if (yLevel == null)
+            yLevel = new ArrayList();  
+        yLevel.add(root.val);
+        xLevel.put(y, yLevel);
+        total.put(x, xLevel);
+        traverse(root.left, x-1, y+1);
+        traverse(root.right, x+1, y+1);
+    }
+  
   
   public List<List<Integer>> verticalOrder(TreeNode root) {
     HashMap<Integer, List<Integer>> map = new HashMap();
