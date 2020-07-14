@@ -2,32 +2,22 @@
  * Created by csy99 on 5/19/20.
  */
 class Solution {
-    // merge sort, time: O(n)
+    // two pointers, time: O(n)
     public int[] sortedSquares(int[] A) {
         int n = A.length;
-        int j = 0;
-        while (j < n && A[j] < 0)
-            j++;
-        int i = j-1;
         int[] res = new int[n];
-        int t = 0;
-        while (i >= 0 && j < n) {
-            if (A[i]*A[i] < A[j]*A[j]) {
-                res[t] = A[i]*A[i];
-                i--;
+        int l = 0;
+        int r = n-1;
+        int pos = n-1;
+        while (l <= r) {
+            if (A[l]*A[l] >= A[r]*A[r]) {
+                res[pos] = A[l]*A[l];
+                l++;
             } else {
-                res[t] = A[j]*A[j];
-                j++;
+                res[pos] = A[r]*A[r];
+                r--;
             }
-            t++;
-        }
-        while (i >= 0) {
-            res[t++] = A[i]*A[i];
-            i--;
-        }
-        while (j < n) {
-            res[t++] = A[j]*A[j];
-            j++;
+            pos--;
         }
         return res;
     }
