@@ -6,40 +6,54 @@ package Leetcode;
 public class Q480_Sliding_Window_Median {
     // insertion sort, time: O(n*k)
     public double[] medianSlidingWindow(int[] nums, int k) {
-        if (k <= 0)
-            return new double[0];
-        double[] res = new double[nums.length-k+1];
-        int[] window = new int[k];
+        int n = nums.length;
+        if (n < k) return new double[0];
+        double[] res = new double[n-k+1];
+        int[] arr = new int[k];
         for (int i = 0; i < k; i++)
-            window[i] = nums[i];
-        Arrays.sort(window);
-        for (int i = k; i <= nums.length; i++) {
-            res[i-k] = ((double)window[k/2] + window[(k-1)/2])/2;
-            if (i == nums.length)
+            arr[i] = nums[i];
+        Arrays.sort(arr);
+        for (int i = 0; i < n-k+1; i++) {
+            res[i] = getMid(arr);
+            if (i == n-k)
                 break;
-            remove(window, nums[i-k]);
-            insert(window, nums[i]);
+            remove(arr, nums[i]);
+            insert(arr, nums[i+k]);
         }
         return res;
     }
     
-    private void insert(int[] arr, int val) {
-        int i = 0;
-        while (i < arr.length-1 && val > arr[i])
-            i++;
-        int j = arr.length-1;
-        while (j > i)
-            arr[j] = arr[--j];
-        arr[j] = val;
+    private double getMid(int[] arr) {
+        if (arr.length % 2 == 1)
+            return arr[arr.length/2];
+        return ((double)arr[arr.length/2-1] + (double)arr[arr.length/2]) / 2;
+    }
+
+    private int getPos(int[] arr, int num) {
+        int l = 0; 
+        int r = arr.length-1;
+        while (l < r) {
+            int mid = l + (r-l)/2;
+            if (arr[mid] == num)
+                return mid;
+            if (arr[mid] < num)
+                l = mid + 1;
+            else
+                r = mid;
+        }
+        return l;
     }
     
-    private void remove(int[] arr, int val) {
-        int i = 0;
-        while (i < arr.length && arr[i] != val)
-            i++;
-        while (i < arr.length-1) {
+    private void remove(int[] arr, int num) {
+        int pos = getPos(arr, num);
+        for (int i = pos; i < arr.length-1; i++)
             arr[i] = arr[i+1];
-            i++;
-        }
+    }
+
+    private void insert(int[] arr, int num) {
+        int pos = getPos(arr, num);
+        for (int i = arr.length-1; i > pos; i--) 
+            arr[i] = arr[i-1];
+        arr[pos] = num;
     }
 }
