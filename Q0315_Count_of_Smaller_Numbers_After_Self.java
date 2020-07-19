@@ -6,7 +6,61 @@ import java.util.List;
 /**
  * Created by csy99 on 3/16/20.
  */
+class Node {
+    int val;
+    int idx;
+    
+    public Node (int v, int i) {
+        val = v;
+        idx = i;
+    }
+}
+
 public class Q0315_Count_of_Smaller_Numbers_After_Self {
+    // merge sort
+    int[] count;
+    public List<Integer> countSmaller(int[] nums) {
+        int n = nums.length;
+        count = new int[n];
+        List<Integer> res = new ArrayList();
+        if (n == 0) return res;
+        Node[] nodes = new Node[n];
+        for (int i = 0; i < n; i++)
+            nodes[i] = new Node(nums[i], i);
+        mergesort(nodes, 0, n-1);
+        for (int c: count)
+            res.add(c);
+        return res;
+    }
+    
+    private Node[] mergesort(Node[] nodes, int l, int r) {
+        if (l == r)
+            return new Node[] {nodes[l]};
+        int mid = (r - l) / 2 + l;
+        Node[] first = mergesort(nodes, l, mid);
+        Node[] second = mergesort(nodes, mid+1, r);
+        Node[] merged = new Node[r-l+1];
+        int i = 0, j = 0, k = 0;
+        int reversed = 0;
+        while (i < first.length && j < second.length) {
+            if (first[i].val > second[j].val) {
+                reversed++;
+                merged[k++] = second[j++];
+            } else {
+                count[first[i].idx] += reversed;
+                merged[k++] = first[i++];
+            }
+        }
+        while (i < first.length) {
+            count[first[i].idx] += reversed;
+            merged[k++] = first[i++];
+        }
+        while (j < second.length) 
+            merged[k++] = second[j++];
+        return merged;
+    }
+    
+    // BIT
     public List<Integer> countSmaller(int[] nums) {
         int[] sorted = Arrays.copyOf(nums, nums.length);
         Arrays.sort(sorted);
