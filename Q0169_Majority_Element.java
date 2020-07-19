@@ -20,6 +20,8 @@ public class Q169_Majority_Element {
         // the most freq element is the same in two ranges
         if (first[0] == second[0])
             return new int[] {first[0], first[1]+second[1]};
+        // the line below cannot change from ">" to ">=", otherwise won't pass the case [6,5,5].
+        // Think in this way (an intuition not a proof): The length of the first half is larger than or equal to that of the second half, it should have absolute advantage
         if (first[1] > second[1])
             return new int[] {first[0], first[1]+count(nums, mid+1, r, first[0])};
         else
