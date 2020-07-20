@@ -19,17 +19,15 @@ public class Q053_Maximum_Subarray {
     public int maxSubArray(int[] nums) {
         int n = nums.length;
         if (n == 0) return 0;
-        int maxSum = nums[0];
-        int sum = 0;
-        for (int i = 0; i < n; i++) {
-            int cur = 0;
-            if (sum > 0)
-                cur = sum + nums[i];
+        int res = nums[0];
+        int sum = nums[0];
+        for (int i = 1; i < n; i++) {
+            if (sum < 0)
+                sum = nums[i];
             else
-                cur = nums[i];
-            maxSum = Math.max(maxSum, cur);
-            sum = cur;
+                sum += nums[i];
+            res = Math.max(res, sum);
         }
-        return maxSum;
+        return res;
     }
 }
