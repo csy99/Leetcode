@@ -13,23 +13,21 @@ package Leetcode;
  * You win the game when you guess the number I picked.
  */
 public class Q375_Guess_Number_Higher_or_Lower_II {
-  public int getMoneyAmount(int n) {
-    if (n == 1) return 0;  // no need to guess
-    int[][] money = new int[n+1][n+1];
-    
-    for (int len = 2; len < n+1; len++) {
-      for (int start = 1; start <= n-len+1; start++) {
-        int end = start+len-1;
-        money[start][end] = Integer.MAX_VALUE;
-        for (int guess = start; guess < end; guess++) {
-          if (guess+1 > n)
-            money[start][end] = Math.min(guess + money[start][guess-1], money[start][end]);
-          else
-            money[start][end] = Math.min(guess + Math.max(money[start][guess-1], money[guess+1][end]), money[start][end]);
+    public int getMoneyAmount(int n) {
+        // cost[i][j]: guarantee to guess i~j
+        int[][] cost = new int[n+1][n+1];
+        for (int i = 1; i < n; i++)
+            cost[i][i+1] = i;
+            
+        for (int len = 3; len <= n; len++) {
+            for (int i = 1; i <= n-len+1; i++) {
+                int j = i + len - 1;
+                cost[i][j] = Integer.MAX_VALUE;
+                for (int k = i+1; k < j; k++) {
+                    cost[i][j] = Math.min(cost[i][j], k + Math.max(cost[i][k-1], cost[k+1][j]));
+                }
+            }
         }
-      }
+        return cost[1][n];
     }
-    
-    return money[1][n];
-  }
 }
