@@ -21,6 +21,8 @@ package Leetcode;
  */
 
 public class Q265_Paint_House_II {
+    // Paint House I的思路
+    // time: O(nk^2), space: O(k)
     public int minCostII(int[][] costs) {
         int n = costs.length;
         if (n == 0) return 0;
@@ -43,5 +45,39 @@ public class Q265_Paint_House_II {
         for (int r: res)
             best = Math.min(best, r);
         return best;
+    }
+    
+    
+    // 用min1和min2来记录之前房子的最小和第二小的花费的颜色
+    // 如果当前房子颜色和 min1 相同，那么用 min2计算，反之用 min1
+    // time: O(nk), space: O(1)
+    public int minCostII(int[][] costs) {
+        int n = costs.length;
+        if (n == 0) return 0;
+        int k = costs[0].length;
+        if (k == 0) return 0;
+        
+        int min1 = 0;
+        int min2 = 0;
+        int idx = -1;
+        for (int i = 0; i < n; i++) {
+            int m1 = Integer.MAX_VALUE;
+            int m2 = Integer.MAX_VALUE;
+            int cur = -1;
+            for (int j = 0; j < k; j++) {
+                int cost = costs[i][j] + (j == idx ? min2 : min1);
+                if (cost < m1) {
+                    m2 = m1;
+                    m1 = cost;
+                    cur = j;
+                } else if (cost < m2) {
+                    m2 = cost;
+                }
+            }
+            min1 = m1;
+            min2 = m2;
+            idx = cur;
+        }
+        return min1;
     }
 }
