@@ -21,27 +21,27 @@ package Leetcode;
  */
 
 public class Q265_Paint_House_II {
-  public int minCostII(int[][] costs) {
-    if (costs.length < 1) return 0;
-    int m = costs.length;
-    int n = costs[0].length;
-    int[][] total = new int[m][n];
-    for (int j = 0; j < n; j++)
-      total[0][j] = costs[0][j];
-    for (int i = 1; i < m; i++) {
-      for (int j = 0; j < n; j++) {
-        total[i][j] = Integer.MAX_VALUE;
-        for (int last = 0; last < n; last++) {
-          if (j == last) continue;
-          total[i][j] = Math.min(total[i][j], total[i-1][last] + costs[i][j]);
+    public int minCostII(int[][] costs) {
+        int n = costs.length;
+        if (n == 0) return 0;
+        int k = costs[0].length;
+        if (k == 0) return 0;
+        
+        int[] res = new int[k];
+        for (int i = 0; i < n; i++) {
+            int[] cur = new int[k];
+            for (int j = 0; j < k; j++)
+                cur[j] = Integer.MAX_VALUE;
+            for (int j = 0; j < k; j++) 
+                for (int p = 0; p < k; p++) {
+                    if (j == p) continue;
+                    cur[j] = Math.min(cur[j], costs[i][j] + res[p]);
+                }
+            res = cur;
         }
-      }
+        int best = res[0];
+        for (int r: res)
+            best = Math.min(best, r);
+        return best;
     }
-    
-    // find the min costs
-    int minCost = total[m-1][0];
-    for (int c: total[m-1])
-      minCost = Math.min(minCost, c);
-    return minCost;
-  }
 }
