@@ -4,17 +4,18 @@
  */
 public class Q309_Best_Time_to_Buy_and_Sell_Stock_with_Cooldown {
     public int maxProfit(int[] prices) {
-        int len = prices.length;
-        int hold = Integer.MIN_VALUE;
-        int sell = 0;
+        int n = prices.length;
+        if (n == 0) return 0;
+        int hold = -prices[0];
+        int sold = 0;
         int rest = 0;
-        for (int p: prices) {
-            int prev_sold = sell;
-            sell = hold + p;
-            hold = Math.max(hold, rest - p);
-            rest = Math.max(rest, prev_sold);
+        for (int i = 1; i < n; i++) {
+            int buy = Math.max(hold, rest - prices[i]);
+            rest = Math.max(rest, sold);
+            sold = hold + prices[i];
+            hold = buy;
         }
-        return Math.max(rest, sell);
+        return Math.max(sold, rest);
     }
   
     public int maxProfit(int[] prices) {
