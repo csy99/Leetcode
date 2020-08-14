@@ -1,52 +1,70 @@
 /**
  * Created by csy99 on 5/9/20. 
  */
+// dfs
 class Solution {
-    // DFS 
     int n;
-    String superStr = null;
     String[] arr;
     int[][] match;
+    int best;
+    int[] best_path;
+    
     public String shortestSuperstring(String[] A) {
         n = A.length;
-        if (n == 0) return "";
         arr = A;
         match = new int[n][n];
+        best = Integer.MAX_VALUE;
+        best_path = new int[n];
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                int k = 0;
-                for (k = 0; k < arr[i].length(); k++) {
-                    if (arr[j].indexOf(arr[i].substring(k)) == 0) 
-                        break;
-                }
-                match[i][j] = arr[i].length() - k;
+            for (int j = i+1; j < n; j++) {
+                match[i][j] = cost(arr[i], arr[j]);
+                match[j][i] = cost(arr[j], arr[i]);
             }
         }
-        dfs(new StringBuilder(), new HashSet<String>(), -1);
-        return superStr;
+        dfs(new boolean[n], 0, 0, new int[n]);
+        StringBuilder sb = new StringBuilder();
+        sb.append(arr[best_path[0]]);
+        for (int i = 1; i < n; i++) {
+            int prev = best_path[i-1];
+            int cur = best_path[i];
+            sb.append(arr[cur].substring(arr[cur].length() - match[prev][cur]));
+        }
+        return sb.toString();
     }
     
-    private void dfs(StringBuilder sb, HashSet<String> used, int prev) {
-        if (used.size() == n) {
-            if (superStr == null || sb.length() < superStr.length())
-                superStr = sb.toString();
+    private int cost(String a, String b) {
+        int d = b.length();
+        for (int len = Math.min(a.length(), b.length()); len >= 1; len--) 
+            if (a.substring(a.length() - len).equals(b.substring(0, len))) {
+                d = b.length() - len;
+                break;
+            }
+        return d;
+    }
+    
+    private void dfs(boolean[] used, int d, int cur_len, int[] path) {
+        if (cur_len >= best)
+            return;
+        if (d == n) {
+            best = cur_len;
+            best_path = path.clone();  // must clone, otherwise, the reference will be changed
             return;
         }
-        int len = sb.length();
         for (int i = 0; i < n; i++) {
-            if (used.contains(arr[i]))
+            if (used[i])
                 continue;
-            int matchLen = prev == -1 ? 0 : match[prev][i];
-            if (superStr != null && 
-                sb.length() + arr[i].length() - matchLen > superStr.length())
-                continue;
-            used.add(arr[i]);
-            sb.append(arr[i].substring(matchLen));
-            dfs(sb, used, i);
-            used.remove(arr[i]);
-            sb.setLength(len);
+            path[d] = i;
+            used[i] = true;
+            int add_len = arr[i].length();
+            if (d > 0) {
+                int pre_idx = path[d-1];
+                add_len = match[pre_idx][i];
+            }
+            dfs(used, d+1, add_len + cur_len, path);
+            used[i] = false;
         }
     }
+}
     
     
     // DP
