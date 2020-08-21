@@ -48,30 +48,32 @@ class Solution {
     
     // quick sort
     public int[] sortArray(int[] nums) {
-        sort(nums, 0, nums.length-1);
+        int n = nums.length;
+        if (n <= 1)
+            return nums;
+        quicksort(nums, 0, n-1);
         return nums;
     }
     
-    private void sort(int[] arr, int l, int r) {
-        int p = arr[l+(r-l)/2];
-        int i = l;
-        int j = r;
-        while (i < j) {
-            while (arr[i] < p)
-                i++;
-            while (arr[j] > p)
-                j--;
-            if (i <= j) {  // important
-                int tmp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = tmp;
-                i++;
-                j--;
-            }
+    private void quicksort(int[] nums, int start, int end) {
+        if (start >= end)
+            return;
+        int pivot = nums[(start+end)/2];
+        int l = start;
+        int r = end;
+        while (l < r) {
+            while (nums[l] < pivot)
+                l++;
+            while (nums[r] > pivot)
+                r--;
+            if (l > r) break;
+            int tmp = nums[l];
+            nums[l] = nums[r];
+            nums[r] = tmp;
+            l++;
+            r--;
         }
-        if (l < j)
-            sort(arr, l, j);
-        if (i < r)
-            sort(arr, i, r);
+        quicksort(nums, start, r);
+        quicksort(nums, l, end);
     }
 }
