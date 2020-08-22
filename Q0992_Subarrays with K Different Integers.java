@@ -28,3 +28,28 @@ class Solution {
         return cnt;
     }
 }
+
+// convert the problem from calculating exactly K distinct elements to at most K distinct elements
+class Solution {
+    public int subarraysWithKDistinct(int[] A, int K) {
+        return atMostK(A, K) - atMostK(A, K-1);
+    }
+    
+    private int atMostK(int[] A, int k) {
+        int n = A.length;
+        if (n == 0) return 0;
+        int[] cnt = new int[n + 1];
+        int res = 0;
+        int l = 0;
+        for (int r = 0; r < n; r++) {
+            cnt[A[r]]++;
+            if (cnt[A[r]] == 1)
+                k--;
+            while (k < 0)
+                if (--cnt[A[l++]] == 0) 
+                    k++;
+            res += r - l + 1;
+        }
+        return res;
+    }
+}
