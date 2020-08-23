@@ -4,6 +4,40 @@ package Leetcode;
  * Created by csy99 on 3/21/20.
  */
 public class Q132_Palindrome_Partitioning_II {
+      public int minCut(String s) {
+        int n = s.length();
+        // isPa[i][j]: check if s[i~j] is palindrome
+        boolean[][] isPa = new boolean[n][n];
+        for (int i = 0; i < n; i++)
+            isPa[i][i] = true;
+        for (int len = 2; len <= n; len++) {
+            for (int i = 0; i+len-1 < n; i++) {
+                int j = i + len - 1;
+                char start = s.charAt(i);
+                char end = s.charAt(j);
+                if (start != end)
+                    continue;
+                if (len <= 3 || isPa[i+1][j-1])
+                    isPa[i][j] = true;
+            }
+        }
+        // cut[j]: the min cut of palindrome partitioning required for s[0~j] 
+        int[] cut = new int[n];
+        for (int i = 1; i < n; i++)
+            cut[i] = n;
+        for (int j = 1; j < n; j++) {
+            if (isPa[0][j]) {
+                cut[j] = 0;
+                continue;
+            }
+            for (int i = 0; i < j; i++) {
+                if (isPa[i+1][j])
+                    cut[j] = Math.min(cut[j], cut[i] + 1);
+            }
+        }
+        return cut[n-1];
+    }
+    
   // dp
   public int minCut(String s) {
     int n = s.length();
