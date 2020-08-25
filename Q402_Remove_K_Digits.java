@@ -1,28 +1,35 @@
 package Leetcode;
 
 /**
- * Created by rbhatnagar2 on 1/15/17.
+ * Created by csy99 on 8/25/20.
  */
 public class Q402_Remove_K_Digits {
     public String removeKdigits(String num, int k) {
-        int digits = num.length() - k;
-        char[] stk = new char[num.length()];
-        int top = 0;
-        // k keeps track of how many characters we can remove
-        // if the previous character in stk is larger than the current one
-        // then removing it will get a smaller number
-        // but we can only do so when k is larger than 0
-        for (int i = 0; i < num.length(); ++i) {
-            char c = num.charAt(i);
-            while (top > 0 && stk[top - 1] > c && k > 0) {
-                top -= 1;
-                k -= 1;
-            }
-            stk[top++] = c;
-        }
-        // find the index of first non-zero digit
+        int n = num.length();
+        if (k == n) return "0";
+        StringBuilder sb = new StringBuilder();
         int idx = 0;
-        while (idx < digits && stk[idx] == '0') idx++;
-        return idx == digits ? "0" : new String(stk, idx, digits - idx);
+        // greedy, make seq close to asc order
+        while (idx < n && k > 0) {  
+            char cur = num.charAt(idx);
+            while (sb.length() > 0 && cur - '0' < sb.charAt(sb.length()-1) - '0' && k > 0) {
+                sb.deleteCharAt(sb.length()-1);
+                k--;
+            }
+            sb.append(cur);
+            idx++;
+        }
+        sb.append(num.substring(idx, n));
+        // the seq is already in strict asc order, get rid of the last few digit
+        sb.setLength(sb.length() - k);
+        // deal with leading 0
+        while (sb.length() > 1) {
+            if (sb.charAt(0) == '0')
+                sb.deleteCharAt(0);
+            else
+                break;
+        }
+        if (sb.length() == 0) return "0";
+        return sb.toString();
     }
 }
