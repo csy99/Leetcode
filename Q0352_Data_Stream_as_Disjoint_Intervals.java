@@ -105,3 +105,39 @@ class SummaryRanges {
         return res;
     }
 }
+
+    TreeMap<Integer, Integer> map = new TreeMap();
+    
+    /** Initialize your data structure here. */
+    public SummaryRanges() {
+        
+    }
+    
+    public void addNum(int val) {
+        if (map.containsKey(val))
+            return;
+        int left_len = map.getOrDefault(val-1, 0);
+        int right_len = map.getOrDefault(val+1, 0);
+        int total_len = left_len + 1 + right_len;
+        map.put(val + right_len, total_len);
+        map.put(val - left_len, total_len);
+        map.put(val, total_len);
+    }
+    
+    public int[][] getIntervals() {
+        List<int[]> intervals = new ArrayList();
+        int ending = -1;
+        while (true) {
+            Integer key = map.ceilingKey(ending);
+            if (key == null) break;
+            int val = map.get(key);
+            int[] tmp = new int[] {key, key + val - 1};
+            intervals.add(tmp);
+            ending = key + val;
+        }
+        int[][] res = new int[intervals.size()][2];
+        for (int i = 0; i < res.length; i++)
+            res[i] = intervals.get(i);
+        return res;
+    }
+}
