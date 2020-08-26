@@ -3,7 +3,7 @@ package Leetcode;
 import java.util.Stack;
 
 /**
- * Created by rbhatnagar2 on 1/15/17.
+ * Created by csy99 on 8/26/20.
  */
 public class Q232_Implement_Queue_using_One_Stack {
     Stack<Integer> s1 = new Stack<Integer>();
@@ -32,13 +32,17 @@ public class Q232_Implement_Queue_using_One_Stack {
      * Get the front element.
      */
     public int peek() {
-        // TBD
-        return 0;
-    }
+        int top = s1.pop();
+        if (s1.isEmpty()) {
+            s1.push(top);
+            return top;
+        }
 
-    /**
-     * Returns whether the queue is empty.
-     */
+        int result = peek();
+        s1.push(top);
+        return result;
+    }
+    
     public boolean empty() {
         return s1.isEmpty();
     }
