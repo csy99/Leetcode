@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 /**
- * Created by rbhatnagar2 on 1/15/17.
+ * Created by csy99 on 8/26/20.
  */
 public class Q352_Data_Stream_as_Disjoint_Intervals {
     TreeSet<Interval> set;
@@ -64,5 +64,44 @@ public class Q352_Data_Stream_as_Disjoint_Intervals {
             start = s;
             end = e;
         }
+    }
+}
+
+
+class SummaryRanges {
+
+    HashMap<Integer, Integer> map = new HashMap();
+    HashSet<Integer> start = new HashSet();
+    
+    /** Initialize your data structure here. */
+    public SummaryRanges() {
+        
+    }
+    
+    public void addNum(int val) {
+        if (map.containsKey(val))
+            return;
+        int left_len = map.getOrDefault(val-1, 0);
+        int right_len = map.getOrDefault(val+1, 0);
+        int total_len = left_len + 1 + right_len;
+        map.put(val, total_len);
+        map.put(val - left_len, total_len);
+        map.put(val + right_len, total_len);
+        start.remove(val + 1);
+        if (left_len == 0)
+            start.add(val);
+    }
+    
+    public int[][] getIntervals() {
+        List<int[]> intervals = new ArrayList();
+        for (int key: start) {
+            int len = map.get(key);
+            intervals.add(new int[] {key, key+len-1});
+        }
+        Collections.sort(intervals, (a,b)->(a[0]-b[0]));
+        int[][] res = new int[intervals.size()][2];
+        for (int i = 0; i < res.length; i++)
+            res[i] = intervals.get(i);
+        return res;
     }
 }
