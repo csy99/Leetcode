@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by rbhatnagar2 on 1/15/17.
+ * Created by csy99 on 8/28/20.
  */
 public class Q421_Maximum_XOR_of_Two_Numbers_in_an_Array {
     /*
@@ -22,22 +22,23 @@ public class Q421_Maximum_XOR_of_Two_Numbers_in_an_Array {
     but you don't need to track how the group is shrinking,
     you only cares about the final result.
      */
+    // idea is that a^b=max => a^max=b
     public int findMaximumXOR(int[] nums) {
-        int max = 0, mask = 0;
-        for (int i = 31; i >= 0; i--) {
-            mask = mask | (1 << i);
-            Set<Integer> set = new HashSet<>();
-            for (int num : nums) {
-                set.add(num & mask);
-            }
-            int tmp = max | (1 << i);
-            for (int prefix : set) {
-                if (set.contains(tmp ^ prefix)) {
-                    max = tmp;
+        int largest = 0;
+        int mask = 0;
+        for (int d = 30; d >= 0; d--) {
+            int cur = 1 << d; 
+            mask |= cur;
+            HashSet<Integer> set = new HashSet(); 
+            for (int num: nums)
+                set.add(mask & num);
+            for (int val: set) {  // val serves as a
+                if (set.contains(val ^ (largest|cur))) {  // largest|cur serves as max, find if b is in the set
+                    largest |= cur;
                     break;
                 }
             }
         }
-        return max;
+        return largest;
     }
 }
