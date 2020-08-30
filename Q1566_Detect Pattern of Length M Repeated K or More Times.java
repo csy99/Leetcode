@@ -4,6 +4,8 @@
 class Solution {
     public boolean containsPattern(int[] arr, int m, int k) {
         int n = arr.length;
+        if (n < m*k)
+            return false;
         int count = 0;
         for(int i = 0, j = i + m; j < n; i++, j++) {
             if (arr[i] != arr[j])
