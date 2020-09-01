@@ -7,18 +7,39 @@ import java.util.List;
  * Created by rbhatnagar2 on 1/15/17.
  */
 public class Q448_Find_All_Numbers_Disappeared_in_an_Array {
+    // adjust the position of each value
     public List<Integer> findDisappearedNumbers(int[] nums) {
-        List<Integer> res = new ArrayList<Integer>();
-        for (int i = 0; i < nums.length; i++) {
-            if ((nums[Math.abs(nums[i]) - 1]) > 0) {
-                nums[Math.abs(nums[i]) - 1] = 0 - nums[Math.abs(nums[i]) - 1];
+        List<Integer> res = new ArrayList();
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            while (nums[i] != i+1) {
+                int idx = nums[i]-1;
+                if (nums[idx] == nums[i])
+                    break;
+                int tmp = nums[idx];
+                nums[idx] = nums[i];
+                nums[i] = tmp;
             }
         }
-
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[i] > 0) {
-                res.add(i + 1);
-            }
+        for (int i = 0; i < n; i++) {
+            if (nums[i] != i+1)
+                res.add(i+1);
+        }
+        return res;
+    }
+    
+    // label
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        List<Integer> res = new ArrayList();
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            int idx = Math.abs(nums[i]) - 1;
+            if (nums[idx] > 0)
+                nums[idx] = -nums[idx];
+        }
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > 0)
+                res.add(i+1);
         }
         return res;
     }
