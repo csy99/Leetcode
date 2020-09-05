@@ -8,24 +8,19 @@ package Leetcode;
 public class Q0048_Rotate_Image {
     public void rotate(int[][] matrix) {
         int n = matrix.length;
-        if (n < 2) return;
-        int top = 0;
-        int bot = n-1;
-        int left = 0;
-        int right = n-1;
-        int level = n;
-        while (left < right) {
-            for (int i = 0; i < level-1; i++) {
-                int tmp = matrix[top][left+i];
-                matrix[top][left+i] = matrix[bot-i][left];
-                matrix[bot-i][left] = matrix[bot][right-i];
-                matrix[bot][right-i] = matrix[top+i][right];
-                matrix[top+i][right] = tmp;
+        int start = 0;
+        int end = n-1;
+        while (start < end) {
+            for (int i = 0; i < n-1; i++) {
+                int tmp = matrix[start][start+i];
+                matrix[start][start+i] = matrix[end-i][start];
+                matrix[end-i][start] = matrix[end][end-i];
+                matrix[end][end-i] = matrix[start+i][end];
+                matrix[start+i][end] = tmp;
             }
-            left++;
-            right--;
-            top++;
-            bot--;
-            level -= 2;
+            start++;
+            end--;
+            n -= 2;  // 越往内层，需要交换的元素越少
         }
     }
+}
