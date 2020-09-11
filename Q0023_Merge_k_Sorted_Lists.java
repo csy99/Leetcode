@@ -54,44 +54,39 @@ public class Q023_Merge_k_Sorted_Lists {
 // time: O(n*log k), space: O(k)
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
-        if (lists.length == 0)
-            return null;
-        ListNode dum = new ListNode(0);
-        ListNode pre = dum;
-        PriorityQueue<Node> pq = new PriorityQueue(new Comparator<Node>() {
-            public int compare(Node a, Node b) {
-                return a.listNode.val - b.listNode.val;
-            }
-        });
-        for (int i = 0; i < lists.length; i++) {
+        PriorityQueue<Entry> pq = new PriorityQueue<>();
+        int n = lists.length;
+        for (int i = 0; i < n; i++) {
             if (lists[i] == null) continue;
-            Node a = new Node(lists[i], i);
+            Entry entry = new Entry(lists[i], i);
             lists[i] = lists[i].next;
-            pq.add(a);
+            pq.offer(entry);
         }
+        ListNode dummy = new ListNode(0);
+        ListNode tail = dummy;
         while (pq.size() > 0) {
-            Node cur = pq.poll();
-            pre.next = cur.listNode;
-            pre = cur.listNode;
-            int idx = cur.idx;
-            if (lists[idx] != null) {
-                ListNode toBeAdded = lists[idx];
-                lists[idx] = lists[idx].next;
-                Node tmp = new Node(toBeAdded, idx);
-                pq.add(tmp);
+            Entry cur = pq.poll();
+            tail.next = cur.node;
+            tail = cur.node;
+            if (lists[cur.idx] != null) {
+                pq.offer(new Entry(lists[cur.idx], cur.idx));
+                lists[cur.idx] = lists[cur.idx].next;
             }
         }
-        return dum.next;
+        return dummy.next;
     }
-    
 }
 
-class Node {
-    ListNode listNode;
+class Entry implements Comparable<Entry>{
+    ListNode node;
     int idx;
     
-    public Node(ListNode c, int i) {
-        listNode = c;
+    public Entry(ListNode nd, int i) {
+        node = nd;
         idx = i;
+    }
+    
+    public int compareTo(Entry e2) {
+        return Integer.compare(node.val, e2.node.val);
     }
 }
