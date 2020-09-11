@@ -9,30 +9,30 @@ import java.util.Stack;
  */
 public class Q173_Binary_Search_Tree_Iterator {
 class BSTIterator {
-    Stack<TreeNode> st;
+
+    Stack<TreeNode> st = new Stack();
+    
+    private void findLeftMost(TreeNode root) {
+        TreeNode cur = root;
+        while (cur != null) {
+            st.push(cur);
+            cur = cur.left;
+        }
+    }
     
     public BSTIterator(TreeNode root) {
-        st = new Stack();
-        while (root != null) {
-            st.push(root);
-            root = root.left;
-        }
+        findLeftMost(root);
     }
     
     /** @return the next smallest number */
     public int next() {
         TreeNode cur = st.pop();
-        TreeNode runner = cur.right;
-        while (runner != null) {
-            st.push(runner);
-            runner = runner.left;
-        }
+        findLeftMost(cur.right);
         return cur.val;
     }
     
-    /** @return whether we have a next smallest number */
     public boolean hasNext() {
-        return !st.isEmpty();
+        return st.size() != 0;
     }
 }
 }
