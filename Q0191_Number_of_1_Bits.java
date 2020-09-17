@@ -6,6 +6,15 @@ package Leetcode;
 public class Q191_Number_of_1_Bits {
     // you need to treat n as an unsigned value
     public int hammingWeight(int n) {
+        int res = 0;
+        while (n != 0) {
+            res += n & 1;
+            n >>>= 1;
+        }
+        return res;
+    }
+    
+    public int hammingWeight(int n) {
         int bits = 0;
         while (n != 0) {
             bits++;
