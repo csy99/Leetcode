@@ -2,6 +2,24 @@
  * Created by csy99 on 9/17/20.
  */
 class Solution {
+    // dp, time: O(n^2), space: O(n^2)
+    public int longestArithSeqLength(int[] A) {
+        int largest = 0;
+        int res = 0;
+        int n = A.length;
+        for (int a: A)
+            largest = Math.max(largest, a);
+        int[][] dp = new int[n][2*largest+1];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                int d = A[i] - A[j] + largest;
+                dp[i][d] = dp[j][d] + 1;
+                res = Math.max(res, dp[i][d]);
+            }
+        }
+        return res + 1;
+    }
+    
     // HashMap, time: O(n^3 log n), space: O(n)
     public int longestArithSeqLength(int[] A) {
         int n = A.length;
