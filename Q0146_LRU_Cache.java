@@ -99,4 +99,47 @@ public class Q146_LRU_Cache {
     }
 }
 
-
+class LRUCache {
+    int cap;
+    Map<Integer, Integer> mem = new HashMap();
+    Map<Integer, Integer> key2time = new HashMap();
+    int t = 0;
+    
+    public LRUCache(int capacity) {
+        cap = capacity;
+    }
+    
+    // O(1)
+    public int get(int key) {
+        t += 1;
+        if (!mem.containsKey(key))
+            return -1;
+        key2time.put(key, t);
+        return mem.get(key);
+    }
+    
+    // O(k)
+    public void put(int key, int value) {
+        t += 1;
+        // only need to update the information 
+        if (mem.size() < cap || mem.size() == cap && mem.containsKey(key)) {
+            mem.put(key, value);
+            key2time.put(key, t);
+            return;
+        }
+        // find the oldest record
+        int kicked_t = t;
+        int kicked_key = -1;
+        for (Integer k: key2time.keySet()) {
+            int ts = key2time.get(k);
+            if (ts < kicked_t) {
+                kicked_t = ts;
+                kicked_key = k;
+            }
+        }
+        key2time.remove(kicked_key);
+        mem.remove(kicked_key);
+        key2time.put(key, t);
+        mem.put(key, value);
+    }
+}
