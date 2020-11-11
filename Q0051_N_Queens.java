@@ -7,55 +7,51 @@ import java.util.List;
  * Created by csy99 on 3/29/20.
  */
 public class Q051_N_Queens {
-  // every row can have exactly one queen
-  List<List<String>> res = new ArrayList();
-  List<String> board = new ArrayList();
-  boolean[] antiDiag;
-  boolean[] diag;
-  boolean[] col;
-  int n;
-  public List<List<String>> solveNQueens(int n) {
-    // create a board
+    List<List<String>> res = new ArrayList();
     StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < n; i++) 
-      sb.append(".");
-    String row = sb.toString();
-    for (int i = 0; i < n; i++) 
-      board.add(row);
-    // init global var
-    antiDiag = new boolean[2*n-1];
-    diag = new boolean[2*n-1];
-    col = new boolean[n];
-    this.n = n;
-    // backtracking
-    helper(0);
-    return res;
-  }
-  
-  boolean valid(int x, int y) {
-    return !col[x] && !antiDiag[x+y] && !diag[x-y+n-1];
-  }
-  
-  void updateBoard(int x, int y, boolean occupied) {
-    col[x] = occupied;
-    antiDiag[x+y] = occupied;
-    diag[x-y+n-1] = occupied;
-    char[] r = board.get(y).toCharArray();
-    r[x] = occupied? 'Q' : '.';
-    board.set(y, new String(r));
-  }
-  
-  // trying to place a queen in y-th row
-  void helper(int y) {
-    if (y == n) {
-      res.add(new ArrayList(board));
-      return;
+    String emptyRow = null;
+    int n;
+    public List<List<String>> solveNQueens(int n) {
+        this.n = n;
+        for (int j = 0; j < n; j++)
+            sb.append(".");
+        emptyRow = sb.toString(); 
+        List<String> board = new ArrayList();
+        for (int i = 0; i < n; i++)
+            board.add(emptyRow);
+        
+        boolean[] cols = new boolean[n];
+        boolean[] diag = new boolean[2*n+1];
+        boolean[] anti = new boolean[2*n+1];
+        dfs(cols, diag, anti, 0, board);
+        
+        return res;
     }
-    for (int x = 0; x < n; x++) {
-      if (!valid(x, y)) continue;
-      updateBoard(x, y, true);
-      helper(y+1);
-      updateBoard(x, y, false);
+    
+    private void dfs(boolean[] cols, boolean[] diag, boolean[] anti, int r, List<String> board) {
+        if (r == n) {
+            res.add(new ArrayList(board));
+            return;
+        }
+        for (int c = 0; c < n; c++) {  // every row can only has one queen 
+            if (cols[c] || diag[r-c+n-1] || anti[r+c])  // invalid
+                continue;
+            cols[c] = true;
+            diag[r-c+n-1] = true;
+            anti[r+c] = true;
+            board.set(r, placeQueen(c));
+            dfs(cols, diag, anti, r+1, board);
+            board.set(r, emptyRow);
+            cols[c] = false;
+            diag[r-c+n-1] = false;
+            anti[r+c] = false;
+        }
     }
-  }
+    
+    private String placeQueen(int col) {
+        sb.setCharAt(col, 'Q');
+        String val = sb.toString();
+        sb.setCharAt(col, '.');
+        return val;
+    }
 }
