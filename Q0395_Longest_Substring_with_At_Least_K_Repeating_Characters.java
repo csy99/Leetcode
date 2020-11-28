@@ -41,3 +41,25 @@ public class Q395_Longest_Substring_with_At_Least_K_Repeating_Characters {
     return res;
   }
 }
+
+class Solution {
+    public int longestSubstring(String s, int k) {
+        return helper(s, k, 0, s.length());
+    }
+    
+    private int helper(String s, int k, int start, int end) {
+        if (end < k) return 0;
+        int[] counts = new int[26];
+        for (int i = start; i < end; i++) 
+            counts[s.charAt(i) - 'a']++;
+        for (int i = start; i < end; i++) {
+            if (counts[s.charAt(i)-'a'] >= k) // first invalid character 
+                continue;
+            int j = i+1;
+            while (j < end && counts[s.charAt(j)-'a'] < k)
+                j++;
+            return Math.max(helper(s, k, start, i), helper(s, k, j, end));
+        }
+        return end-start;
+    }
+}
