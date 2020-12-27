@@ -1,5 +1,5 @@
 /**
- * Created by csy99 on 12/26/20.
+ * Created by csy99 on 12/26/20 during contest.
  */
 class Solution {
     public int eatenApples(int[] apples, int[] days) {
