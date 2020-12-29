@@ -42,3 +42,48 @@ public class Q421_Maximum_XOR_of_Two_Numbers_in_an_Array {
         return largest;
     }
 }
+
+// Solution 2: Trie
+class Solution {
+    public int findMaximumXOR(int[] nums) {
+        TrieNode root = new TrieNode();
+        for (int num: nums)
+            root.insert(root, num);
+        int res = 0;
+        for (int num: nums)
+            res = Math.max(res, root.query(root, num));
+        return res;
+    }
+}
+
+class TrieNode {
+    TrieNode[] children;
+    
+    public TrieNode() {
+        children = new TrieNode[2];
+    }
+    
+    public void insert(TrieNode root, int num) {
+        TrieNode node = root;
+        for (int i = 30; i >= 0; i--) {
+            int bit = (num >> i) & 1;
+            if (node.children[bit] == null)
+                node.children[bit] = new TrieNode();
+            node = node.children[bit];
+        }
+    }
+    
+    public int query(TrieNode root, int num) {
+        TrieNode node = root;
+        int sum = 0;
+        for (int i = 30; i >= 0; i--) {
+            int bit = (num >> i) & 1;
+            if (node.children[1 - bit] != null) {
+                sum |= (1 << i);
+                node = node.children[1 - bit];
+            } else
+                node = node.children[bit];
+        }
+        return sum;
+    }
+}
