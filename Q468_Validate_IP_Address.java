@@ -1,43 +1,67 @@
 package Leetcode;
 
 /**
- * Created by rbhatnagar2 on 1/15/17.
+ * Created by csy99 on 12/31/20.
  */
 public class Q468_Validate_IP_Address {
     public String validIPAddress(String IP) {
-        if (IP.equals("")) return "Neither";
-        if (isIP4(IP)) return "IPv4";
-        if (isIP6(IP)) return "IPv6";
+        int n = IP.length();
+        if (n == 0) return "Neither";
+        char last = IP.charAt(n-1);
+        if (last == '.' || last == ':')
+            return "Neither";
+        
+        String[] potentialIPv4 = IP.split("\\.");
+        if (potentialIPv4.length == 4) {
+            boolean ipv4 = true;
+            for (String str: potentialIPv4) {
+                if (!partIPv4(str)) {
+                    ipv4 = false;
+                    break;
+                }
+            }
+            if (ipv4) return "IPv4";
+        }
+        
+        String[] potentialIPv6 = IP.split(":");
+        if (potentialIPv6.length == 8) {
+            boolean ipv6 = true;
+            for (String str: potentialIPv6) {
+                if (!partIPv6(str)) {
+                    ipv6 = false;
+                    break;
+                }
+            }
+            if (ipv6) return "IPv6";
+        }
+        
         return "Neither";
     }
-
-    public boolean isIP4(String IP) {
-        if (IP.charAt(0) == '.' || IP.charAt(IP.length() - 1) == '.') return false;
-        String[] temp = IP.split("\\.");
-        if (temp.length != 4) return false;
-        for (int i = 0; i < 4; i++) {
-            try {
-                if (temp[i].startsWith("0") && temp[i].length() > 1) return false;
-                if (Integer.parseInt(temp[i]) > 255 || temp[i].charAt(0) == '-' || temp[i].charAt(0) == '+')
-                    return false;
-            } catch (NumberFormatException e) {
-                System.out.println("ERROR");
-                return false;
-            }
+    
+    private boolean partIPv4(String str) {
+        int n = str.length();
+        if (n == 0 || n > 3) return false;
+        if (n > 1 && str.charAt(0) == '0') return false;
+        int sum = 0;
+        for (int i = 0; i < n; i++) {
+            char c = str.charAt(i);
+            if (c < '0' || c > '9') return false;
+            sum = sum * 10 + (c - '0');
         }
-        return true;
+        return sum < 256;
     }
-
-    public boolean isIP6(String IP) {
-        if (IP.charAt(0) == ':' || IP.charAt(IP.length() - 1) == ':') return false;
-        String[] temp = IP.split(":");
-        if (temp.length != 8) return false;
-        for (int i = 0; i < 8; i++) {
-            if (temp[i].length() > 4 || temp[i].length() == 0) return false;
-            for (int j = 0; j < temp[i].length(); j++) {
-                if ((temp[i].charAt(j) >= '0' && temp[i].charAt(j) <= '9') || (temp[i].charAt(j) >= 'a' && temp[i].charAt(j) <= 'f') || (temp[i].charAt(j) >= 'A' && temp[i].charAt(j) <= 'F')) {
-                } else return false;
-            }
+    
+    private boolean partIPv6(String str) {
+        int n = str.length();
+        if (n == 0 || n > 4) return false;
+        for (int i = 0; i < n; i++) {
+            boolean valid = false;
+            char c = Character.toLowerCase(str.charAt(i));
+            if (c >= '0' && c <= '9') 
+                valid = true;
+            if (c >= 'a' && c <= 'f')
+                valid = true;
+            if (!valid) return false;
         }
         return true;
     }
