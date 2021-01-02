@@ -31,3 +31,41 @@ public class Q0151_Reverse_Words_in_a_String {
     return sb.toString();
   }  
 }
+
+// helper function
+{
+    public String reverseWords(String s) {
+        s = s.trim();
+        int n = s.length();
+        char[] arr = new char[n];
+        int pos = 0;
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+            if (i > 0 && c == ' ' && s.charAt(i-1) == ' ')
+                continue;
+            arr[pos++] = c;
+        }
+        reverse(arr, 0, pos-1);
+        int prev = 0;
+        for (int i = 0; i < pos; i++) {
+            if (arr[i] == ' ') {
+                reverse(arr, prev, i-1);
+                prev = i+1;
+            }
+        }
+        reverse(arr, prev, pos-1);
+        return new String(arr).trim();
+    }
+    
+    private void reverse(char[] arr, int s, int e) {
+        int l = s;
+        int r = e;
+        while (l < r) {
+            char copy = arr[l];
+            arr[l] = arr[r];
+            arr[r] = copy;
+            l++;
+            r--;
+        }
+    }
+}
