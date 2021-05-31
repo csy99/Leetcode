@@ -38,6 +38,35 @@ public class Q140_Word_Break_II {
       }
     }
   }
+  
+  // backtracking 2
+ class Solution {
+    Set<String> dict = new HashSet();
+    List<String> res = new ArrayList();
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        for (String w: wordDict)
+            dict.add(w);
+        helper(s, s.length()-1, new StringBuilder());
+        return res;
+    }
+    
+    private void helper(String str, int end, StringBuilder sb) {
+        if (end == -1) {
+            sb.deleteCharAt(0);
+            res.add(sb.toString());
+            sb.insert(0, ' ');
+            return;
+        }
+        for (int s = end; s >= 0; s--) {
+            String right = str.substring(s, end+1);
+            if (!dict.contains(right)) continue;
+            sb.insert(0, right);
+            sb.insert(0, ' ');
+            helper(str, s-1, sb);
+            sb.replace(0, right.length()+1, "");
+        }
+    }
+}
     
   // memorization recursion
   HashMap<String, List<String>> map = new HashMap();
