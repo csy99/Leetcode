@@ -83,3 +83,53 @@ public class Q269_Alien_Dictionary {
         return sb.toString();
     }
 }
+
+// 7/16/21
+public class Solution {
+    public String alienOrder(String[] words) {
+        int n = words.length;
+        Map<Character, Set<Character>> graph = new HashMap();
+        for (String word: words) {
+            for (char c: word.toCharArray())
+                if (!graph.containsKey(c))
+                    graph.put(c, new HashSet());
+        }
+        for (int i = 1; i < n; i++) {
+            int m = words[i-1].length();
+            char c1 = ' ';
+            char c2 = ' ';
+            for (int j = 0; j < m; j++) {
+                if (j >= words[i].length()) // invalid dict
+                    return "";
+                c1 = words[i-1].charAt(j);
+                c2 = words[i].charAt(j);
+                if (c1 != c2) break;
+            }
+            if (c1 != c2)   // c1 < c2
+                graph.get(c2).add(c1);
+        }
+        StringBuilder sb = new StringBuilder();
+        List<Character> q = new ArrayList();
+        for (char key: graph.keySet())
+            if (graph.get(key).size() == 0)
+                q.add(key);
+        boolean[] seen = new boolean[26];
+        while (q.size() > 0) {
+            // return the smallest in normal lexicographical order
+            Collections.sort(q);  
+            char cur = q.remove(0);
+            if (seen[cur-'a'])   
+                continue;
+            seen[cur-'a']  = true;    
+            sb.append(cur);
+            for (char key: graph.keySet()) {
+                if (seen[key-'a']) continue;
+                graph.get(key).remove(cur);
+                if (graph.get(key).size() == 0)
+                    q.add(key);
+            }
+        }
+        if (sb.length() < graph.size()) return "";
+        return sb.toString();
+    }
+}
