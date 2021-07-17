@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Created by rbhatnagar2 on 3/15/17.
+ * Created by csy99 on 7/17/21.
  * <p>
  * Design a hit counter which counts the number of hits received in the past 5 minutes.
  * Each function accepts a timestamp parameter (in seconds granularity)
@@ -61,10 +61,9 @@ public class Q362_Design_Hit_Counter {
      * @param timestamp - The current timestamp (in seconds granularity).
      */
     public int getHits(int timestamp) {
-        if (!queue.isEmpty()) {
-            while (!queue.isEmpty() && (timestamp - queue.peek()) >= 300) {
+        while (!queue.isEmpty()) {
+            if (timestamp - queue.peek()) >= 300) 
                 queue.poll();
-            }
         }
         return queue.size();
     }
