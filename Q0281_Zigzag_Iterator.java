@@ -15,25 +15,37 @@ import java.util.List;
  */
 
 public class Q281_Zigzag_Iterator {
-    Iterator<Integer> i;
-    Iterator<Integer> j;
-    Iterator<Integer> tmp;
-    
+    int i = 0;
+    int j = 0;
+    int t = 0;
+    List<Integer> l1;
+    List<Integer> l2;
     public ZigzagIterator(List<Integer> v1, List<Integer> v2) {
-        i = v2.iterator();
-        j = v1.iterator();
+        l1 = v1;
+        l2 = v2;
     }
 
+    /*
+     * @return: An integer
+     */
     public int next() {
-        if (j.hasNext()) {
-            tmp = j;
-            j = i;
-            i = tmp;
-        }
-        return i.next();
+        if (i >= l1.size()) 
+            return l2.get(j++);
+        if (j >= l2.size()) 
+            return l1.get(i++);
+        int res = 0;
+        if (t % 2 == 0)
+            res = l1.get(i++);
+        else
+            res = l2.get(j++);
+        t++;
+        return res;
     }
 
+    /*
+     * @return: True if has next
+     */
     public boolean hasNext() {
-        return i.hasNext() || j.hasNext();
+        return i < l1.size() || j < l2.size();
     }
 }
