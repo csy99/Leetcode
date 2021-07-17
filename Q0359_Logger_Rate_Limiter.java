@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by rbhatnagar2 on 3/15/17.
+ * Created by csy99 on 7/17/21.
  * <p>
  * Design a logger system that receive stream of messages along with its timestamps,
  * each message should be printed if and only if it is not printed in the last 10 seconds.
