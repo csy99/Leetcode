@@ -40,26 +40,29 @@ import java.util.Set;
  * 2. The abbr is in the dict && the word appears one and only once in the dict.
  */
 public class Q288_Unique_Word_Abbreviation {
-    HashMap<String, String> map = new HashMap();
     /*
     * @param dictionary: a list of words
     */
-    public ValidWordAbbr(String[] dictionary) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < dictionary.length; i++) {
-            sb.setLength(0);
-            if (dictionary[i].length() > 0)
-                sb.append(dictionary[i].charAt(0));
-            if (dictionary[i].length() > 2)
-                sb.append(dictionary[i].length() - 2);
-            if (dictionary[i].length() > 1)
-                sb.append(dictionary[i].charAt(dictionary[i].length() - 1));
-            String key = sb.toString();    
-            if (!map.containsKey(key) || map.get(key).equals(dictionary[i])) 
-                map.put(key, dictionary[i]);
-            else
-                map.put(key, "-1");
+    Map<String, String> abbrs = new HashMap();
+    StringBuilder sb = new StringBuilder();
+    public ValidWordAbbr(String[] words) {
+        for (String word: words) {
+            String abbr = getAbbr(word);
+            if (!abbrs.containsKey(abbr))
+                abbrs.put(abbr, word);
+            else if (!abbrs.get(abbr).equals(word))
+                abbrs.put(abbr, "-");
         }
+    }
+
+    private String getAbbr(String word) {
+        if (word.length() < 3) 
+            return word;
+        sb.setLength(0);
+        sb.append(word.charAt(0));
+        sb.append(word.length()-2);
+        sb.append(word.charAt(word.length()-1));
+        return sb.toString();
     }
 
     /*
@@ -67,14 +70,9 @@ public class Q288_Unique_Word_Abbreviation {
      * @return: true if its abbreviation is unique or false
      */
     public boolean isUnique(String word) {
-        StringBuilder sb = new StringBuilder();
-        if (word.length() > 0)
-            sb.append(word.charAt(0));
-        if (word.length() > 2)
-            sb.append(word.length() - 2);
-        if (word.length() > 1)
-            sb.append(word.charAt(word.length() - 1));
-        String key = sb.toString(); 
-        return !map.containsKey(key) || map.get(key).equals(word);
+        String abbr = getAbbr(word);
+        if (!abbrs.containsKey(abbr)) return true;
+        if (abbrs.get(abbr).equals(word)) return true;
+        return false;
     }
 }
