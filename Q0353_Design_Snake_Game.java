@@ -3,7 +3,7 @@ package Leetcode;
 import java.util.LinkedList;
 
 /**
- * Created by rbhatnagar2 on 3/15/17.
+ * Created by csy99 on 7/20/21.
  * <p>
  * Design a Snake game that is played on a device with screen size = width x height.
  * Play the game online if you are not familiar with the game.
@@ -22,10 +22,10 @@ import java.util.LinkedList;
 public class Q353_Design_Snake_Game {
     int[][] food;
     int index;
-    int row, col;
+    int m, n;
     int x, y;
     int len;
-    LinkedList<int[]> queue;
+    LinkedList<int[]> pos;
 
     /**
      * Initialize your data structure here.
@@ -37,13 +37,14 @@ public class Q353_Design_Snake_Game {
      */
     public Q353_Design_Snake_Game(int width, int height, int[][] food) {
         this.food = food;
-        this.index = 0;
-        this.x = 0;
-        this.y = 0;
-        this.row = height;
-        this.col = width;
-        this.queue = new LinkedList<int[]>();
-        this.queue.offer(new int[]{0, 0});
+        index = 0;
+        m = height;
+        n = width;
+        y = 0;
+        x = 0;
+        len = 1;
+        pos = new LinkedList<int[]>();
+        pos.offer(new int[]{0, 0});
     }
 
     /**
@@ -56,52 +57,45 @@ public class Q353_Design_Snake_Game {
     public int move(String direction) {
         switch (direction) {
             case "U":
-                x--;
-                break;
-            case "L":
                 y--;
                 break;
-            case "R":
-                y++;
+            case "L":
+                x--;
                 break;
-            case "D":
+            case "R":
                 x++;
                 break;
+            case "D":
+                y++;
+                break;
         }
 
-        if (!isValid(x, y)) {
+        if (!isValid(y, x)) 
             return -1;
-        }
-
-        return process(x, y);
+        return process(y, x);
     }
 
-    public boolean isValid(int x, int y) {
-        if (x < 0 || x >= row || y < 0 || y >= col)
+    public boolean isValid(int y, int x) {
+        if (y < 0 || y >= m || x < 0 || x >= n)
             return false;
-
         return true;
     }
 
-    public int process(int x, int y) {
-
-        if (index == food.length) {
+    public int process(int y, int x) {
+        if (index == food.length) {  // ?
             queue.poll();
-
-        } else if (food[index][0] == x && food[index][1] == y) {
+        } else if (food[index][0] == y && food[index][1] == x) {
             len++;
             index++;
         } else {
             queue.poll();
         }
 
-        for (int[] p : queue) {
-            if (p[0] == x && p[1] == y)
+        for (int[] p : pos) {
+            if (p[0] == y && p[1] == x)
                 return -1;
         }
-
-        queue.offer(new int[]{x, y});
-
+        pos.offer(new int[]{y, x});
         return len;
     }
 }
