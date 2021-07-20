@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 /**
- * Created by rbhatnagar2 on 3/15/17.
+ * Created by csy99 on 7/20/21.
  * <p>
  * Design a Phone Directory which supports the following operations:
  * <p>
@@ -14,7 +14,7 @@ import java.util.LinkedList;
  */
 public class Q379_Design_Phone_Directory {
     int max;
-    HashSet<Integer> set;
+    HashSet<Integer> used;
     LinkedList<Integer> queue;
 
     /**
@@ -23,11 +23,10 @@ public class Q379_Design_Phone_Directory {
      * @param maxNumbers - The maximum numbers that can be stored in the phone directory.
      */
     public Q379_Design_Phone_Directory(int maxNumbers) {
-        set = new HashSet<Integer>();
+        used = new HashSet<Integer>();
         queue = new LinkedList<Integer>();
-        for (int i = 0; i < maxNumbers; i++) {
+        for (int i = 0; i < maxNumbers; i++) 
             queue.offer(i);
-        }
         max = maxNumbers - 1;
     }
 
@@ -41,7 +40,7 @@ public class Q379_Design_Phone_Directory {
             return -1;
 
         int e = queue.poll();
-        set.add(e);
+        used.add(e);
         return e;
     }
 
@@ -49,15 +48,15 @@ public class Q379_Design_Phone_Directory {
      * Check if a number is available or not.
      */
     public boolean check(int number) {
-        return !set.contains(number) && number <= max;
+        return !used.contains(number) && number <= max;
     }
 
     /**
      * Recycle or release a number.
      */
     public void release(int number) {
-        if (set.contains(number)) {
-            set.remove(number);
+        if (used.contains(number)) {
+            used.remove(number);
             queue.offer(number);
         }
     }
