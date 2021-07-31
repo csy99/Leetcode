@@ -20,11 +20,10 @@ class Solution {
         int[] path = new int[n];
         for (int i = 0; i < n; i++)
             path[i] = -1;
-        dfs(0, 0, 0, path);
+        dfs(0, -1, 0, path);
         return res;
     }
     
-    // return min distance from origin 
     private int dfs(int cur, int par, int d, int[] path) {
         path[cur] = d + 1;
         for (int child: neighbors[cur]) {
@@ -35,7 +34,7 @@ class Solution {
                 path[cur] = Math.min(path[cur], path[child]);
             }
         }
-        if (path[cur] > d && cur != 0) { // current edge not on a circle
+        if (path[cur] > d && par != -1) { // current edge not on a circle
             List<Integer> edge = new ArrayList();
             edge.add(cur);
             edge.add(par);
