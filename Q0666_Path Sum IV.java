@@ -36,22 +36,6 @@ public class Solution {
                 n_nodes++;
             }
         }
-        // Queue<Node> queue = new LinkedList();
-        // queue.add(root);
-        // while (queue.size() > 0) {
-        //     int size = queue.size();
-        //     for (int i = 0; i < size; i++) {
-        //         Node cur = queue.poll();
-        //         if (cur == null)
-        //             System.out.print("null ");
-        //         else {
-        //             System.out.print(cur.val + " ");
-        //             queue.add(cur.left);
-        //             queue.add(cur.right);
-        //         }
-        //     }
-        //     System.out.println();
-        // }
         int[] res = new int[1];
         traverse(res, root, 0);
         return res[0];
