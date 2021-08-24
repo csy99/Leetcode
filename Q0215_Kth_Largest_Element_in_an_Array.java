@@ -70,3 +70,24 @@ public class Q215_Kth_Largest_Element_in_an_Array {
     return slow;
   }
 }
+    // quickselect
+    public int findKthLargest(int[] nums, int k) {
+        return quickSelect(nums, 0, nums.length-1, k);
+    }
+    
+    private int quickSelect(int[] nums, int l, int r, int k) {
+        int p = l;
+        for (int i = l; i < r; i++) {
+            if (nums[i] <= nums[r]) {
+                swap(nums, p, i);
+                p++;
+            }
+        }
+        swap(nums, p, r);
+        
+        int cnt = r - p + 1;
+        if (cnt == k) return nums[p];
+        if (cnt > k)
+            return quickSelect(nums, p+1, r, k);
+        return quickSelect(nums, l, p-1, k-cnt);
+    }
