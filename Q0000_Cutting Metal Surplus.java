@@ -1,5 +1,6 @@
 /**
  * Created by csy99 on 8/31/21.
+ * https://leetcode.com/discuss/interview-question/428244/Cutting-Metal-Audible-Online-Assesment
  */
 public class Solution {
     public int maxProfit(int[] nums, int cutCost, int price) {
