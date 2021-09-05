@@ -60,3 +60,45 @@ public class Q057_Insert_Interval {
       return ans;
     }
 }
+
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        int start = newInterval[0];
+        int end = newInterval[1];
+        List<int[]> merge = new ArrayList();
+        int i = 0;
+        boolean succ = false;
+        while (i < intervals.length) {
+            if (intervals[i][0] <= start && intervals[i][1] >= start
+                || intervals[i][0] >= start && intervals[i][0] <= end) {
+                int[] cur = new int[2];
+                succ = true;
+                cur[0] = Math.min(intervals[i][0], start);
+                cur[1] = Math.max(intervals[i][1], end);
+                i++;
+                while (i < intervals.length && intervals[i][0] <= cur[1]) {
+                    cur[1] = Math.max(cur[1], intervals[i][1]);
+                    i++;
+                }
+                merge.add(cur);
+                continue;
+            }
+            if (!succ && intervals[i][0] > end) {
+                merge.add(newInterval);
+                succ = true;
+            }
+            merge.add(intervals[i]);
+            i++;
+        }
+        if (!succ) {
+            if (merge.size() > 0 && end < merge.get(0)[0]) 
+                merge.add(0, newInterval);
+            else
+                merge.add(newInterval);
+        }
+        int[][] res = new int[merge.size()][];
+        for (int j = 0; j < merge.size(); j++)
+            res[j] = merge.get(j);
+        return res;
+    }
+}
