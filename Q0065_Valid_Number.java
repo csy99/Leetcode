@@ -36,3 +36,35 @@ public class Q065_Valid_Number {
     return isDigits && i == s.length();
   }
 }
+
+class Solution {
+    public boolean isNumber(String s) {
+        s = s.trim();
+        int n = s.length();
+        boolean point = false;
+        boolean e = false;
+        boolean number = false;
+        boolean number_behind_e = true;
+        for (int i = 0; i < n; i++) {
+            char c = Character.toLowerCase(s.charAt(i));
+            if ('0' <= c && c <= '9') {
+                number = true;
+                number_behind_e = true;
+            } else if (c == '.') {
+                if (e || point)
+                    return false;
+                point = true;
+            } else if (c == 'e') {
+                if (e || !number) 
+                    return false;
+                number_behind_e = false;
+                e = true;
+            } else if (c == '+' || c == '-') {
+                if (i > 0 && s.charAt(i-1) != 'e')
+                    return false;
+            } else
+                return false;
+        }
+        return number && number_behind_e;
+    }
+}
