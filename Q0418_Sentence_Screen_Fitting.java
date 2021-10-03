@@ -1,7 +1,7 @@
 package Leetcode;
 
 /**
- * Created by rbhatnagar2 on 3/15/17.
+ * Created by csy99 on 10/3/21.
  * <p>
  * Given a rows x cols screen and a sentence represented by a list of words,
  * find how many times the given sentence can be fitted on the screen.
@@ -80,21 +80,19 @@ public class Q418_Sentence_Screen_Fitting {
     it will go back to a position in the string.
      */
 
-    public int wordsTyping(String[] sentence, int rows, int cols) {
-        String all = "";
-        for (String s : sentence) {
-            all += s + " ";
-        }
-        int pos = 0;
+    public int wordsTyping(String[] words, int rows, int cols) {
+        StringBuilder sentence = new StringBuilder();
+        for (String w : words)
+            sentence.append(w).append(" ");
         int len = all.length();
+        int pos = 0;
         for (int i = 0; i < rows; i++) {
             pos += cols;
-            if (all.charAt(pos % len) == ' ') {
+            if (sentence.charAt(pos % len) == ' ') {
                 pos++;
             } else {
-                while (pos > 0 && all.charAt((pos - 1) % len) != ' ') {
+                while (pos > 0 && sentence.charAt((pos - 1) % len) != ' ') 
                     pos--;
-                }
             }
         }
         return pos / len;
