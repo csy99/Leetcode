@@ -5,6 +5,32 @@ class Solution {
     public int[] findBall(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
+        int[] res = new int[n];
+        for (int k = 0; k < n; k++)
+            res[k] = k;
+        for (int i = 0; i < m; i++) {
+            for (int k = 0; k < n; k++) {
+                if (res[k] == -1) continue;
+                int j = res[k];
+                if (grid[i][j] == 1) {
+                    if (j == n-1 || grid[i][j+1] == -1)  // stuck on edge or middle
+                        res[k] = -1;
+                    else
+                        res[k]++;
+                } else {
+                    if (j == 0 || grid[i][j-1] == 1)  // stuck on edge or middle
+                        res[k] = -1;
+                    else
+                        res[k]--;
+                }
+            }
+        }
+        return res;
+    }
+    
+    public int[] findBall(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
         int[][][] memory = new int[m][n][4];
         int[] res = new int[n];
         for (int i = 0; i < m; i++) {
