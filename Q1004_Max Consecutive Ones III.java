@@ -26,3 +26,26 @@ class Solution {
         return longest;
     }
 }
+
+class Solution {
+    public int longestOnes(int[] nums, int K) {
+        int n = nums.length;
+        int res = 0;
+        int[] dp = new int[K+1];
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == 1) {
+                for (int k = 0; k <= K; k++) {
+                    dp[k]++;
+                    res = Math.max(res, dp[k]);
+                }
+            } else {
+                for (int k = K; k > 0; k--) {
+                    dp[k] = dp[k-1] + 1;
+                    res = Math.max(res, dp[k]);
+                }
+                dp[0] = 0;
+            }
+        }
+        return res;
+    }
+}
