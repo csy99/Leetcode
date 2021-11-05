@@ -64,3 +64,43 @@ public class Q253_Meeting_Rooms_II {
         return rooms;
     }
 }
+
+// sweeping line, time: O(n log n), space: O(n)
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        int n = intervals.length;
+        List<Event> events = new ArrayList();
+        int res = 0;
+        int cur = 0;
+        for (int[] interval: intervals) {
+            events.add(new Event(interval[0], 1));
+            events.add(new Event(interval[1], -1));
+        }
+        Collections.sort(events);
+        for (Event e: events) {
+            if (e.type == 1) {
+                cur++;
+                res = Math.max(res, cur);
+            } else
+                cur--;
+        }
+        return res;
+    }
+}
+
+
+class Event implements Comparable<Event>{
+    int ts;
+    int type;  // end:-1, start:1
+
+    public Event(int t, int tp) {
+        ts = t;
+        type = tp;
+    }
+
+    public int compareTo(Event o) {
+        if (ts != o.ts)
+            return Integer.compare(ts, o.ts);
+        return Integer.compare(type, o.type);
+    }
+}
